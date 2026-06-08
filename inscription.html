@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign up — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body data-fab="off">
+  <div id="site-header" data-slim="true"></div>
+
+  <main class="auth-split">
+    <aside class="auth-side">
+      <div>
+        <a href="index.html" style="font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-1px;">
+          Verify<span style="color:var(--yellow);">.</span>
+        </a>
+        <h2>Join 12,000 readers who verify before sharing.</h2>
+        <p class="lede">
+          Create your free account and access the five analysis modules, the
+          daily brief, and your personal archive.
+        </p>
+
+        <ul class="auth-features">
+          <li><span class="dot">1</span><span><strong>Five analysis modules</strong><br/><span style="opacity:0.78;">AI-generated media, edited photos, caption fidelity &amp; coherence, manipulation &amp; persuasion, cosmetic ads.</span></span></li>
+          <li><span class="dot">2</span><span><strong>Unlimited reports</strong><br/><span style="opacity:0.78;">Download every report as PDF, JSON or CSV.</span></span></li>
+          <li><span class="dot">3</span><span><strong>Daily brief at 7 AM</strong><br/><span style="opacity:0.78;">Five major fact-checks, in five minutes.</span></span></li>
+        </ul>
+      </div>
+
+      <div class="testimonial">
+        "As a science teacher, I use it in class to show how to trace an image back to its source. Unexpected teaching tool."
+        <cite>— Sami, Pierre-Mendès-France high school, Tunis</cite>
+      </div>
+    </aside>
+
+    <section class="auth-form-side">
+      <div class="auth-card">
+        <h1>Create an account</h1>
+        <p class="sub">Free, no credit card required. You can delete your account at any time.</p>
+
+        <form onsubmit="event.preventDefault(); alert('Coming soon — account creation will be available very shortly.')">
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field">
+              <label for="firstname">First name</label>
+              <input id="firstname" type="text" required placeholder="Maryem" />
+            </div>
+            <div class="field">
+              <label for="lastname">Last name</label>
+              <input id="lastname" type="text" required placeholder="Ben Slimane" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" required placeholder="you@email.tn" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" required placeholder="At least 12 characters" />
+          </div>
+
+          <div class="field">
+            <label for="password2">Confirm password</label>
+            <input id="password2" type="password" required placeholder="••••••••" />
+          </div>
+
+          <label class="flex items-start gap-2 text-sm text-gray-600 mb-5">
+            <input type="checkbox" required class="mt-1" />
+            <span>I accept the <a href="#" class="text-navy underline">terms of use</a> and the <a href="#" class="text-navy underline">privacy policy</a>.</span>
+          </label>
+
+          <button type="submit" class="btn-primary w-full" style="width:100%;padding:14px;font-size:15px;">Create my account</button>
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+          Already registered? <a href="connexion.html" class="text-navy font-semibold hover:underline">Sign in</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+================================================================
+MODULE : DÉTECTION DE MANIPULATION DES MÉDIAS
+Projet CBL — Media Credibility | ESPRIT School of Engineering
+Malek Tirellil — 3rd Year AI
+================================================================
+
+INPUT
+-----
+→ Une image (JPG / PNG / WEBP) ou une vidéo (MP4 / AVI)
+  contenant un contenu publicitaire ou médiatique à analyser.
+
+
+PIPELINE — 5 MODULES EN SÉQUENCE
+----------------------------------
+
+IMAGE / VIDÉO
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│ MODULE 1 — SO1-A : Extraction de texte (OCR)            │
+│ Modèle   : TrOCR (Microsoft) — ViT Encoder + GPT-2     │
+│ Input    : Image brute                                  │
+│ Output   : Texte extrait (string)                       │
+│ Exemple  : "ABONNEZ-VOUS MAINTENANT -70% EXPIRE !!!"   │
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│ MODULE 2 — SO1-B : Classification du texte (NLP)        │
+│ Modèle   : RoBERTa (Meta) — fine-tuné sur 32K titres   │
+│ Input    : Texte extrait (traduit EN si nécessaire)     │
+│ Output   : Score manipulation texte [0.0 → 1.0]        │
+│ Exemple  : 0.997 → MANIPULATEUR                        │
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│ MODULE 3 — SO2 : Détection clickbait visuel             │
+│ Modèle   : ViT-B/16 (Google) — fine-tuné               │
+│ Input    : Image brute (224×224)                        │
+│ Output   : Score clickbait visuel [0.0 → 1.0]          │
+│ Exemple  : 0.84 → FAKE / CLICKBAIT                     │
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│ MODULE 4 — SO4 : Détection éléments d'urgence           │
+│ Modèle   : DETR (Meta) — fine-tuné                     │
+│ Input    : Image brute                                  │
+│ Output   : Bounding boxes des éléments détectés         │
+│            + score urgence [0.0 → 1.0]                 │
+│ Exemple  : 3 éléments → button (0.91), toggle (0.78)   │
+└─────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────┐
+│ MODULE 5 — ManipNet : Fusion multimodale (from scratch) │
+│ Modèle   : ManipNet custom — CNN + Transformer + MLP   │
+│            + Cross-Modal Self-Attention                 │
+│ Input    : Image + Texte + Scores des modules 1-4      │
+│ Output   : Score global manipulation [0.0 → 1.0]       │
+│ Exemple  : 0.87 → TRÈS MANIPULATEUR                    │
+└─────────────────────────────────────────────────────────┘
+
+
+OUTPUT FINAL — CE QUE LA PLATEFORME DOIT AFFICHER
+---------------------------------------------------
+
+1. SCORE GLOBAL
+   → Valeur numérique [0.0 → 1.0]
+   → Label coloré :
+      0.0 – 0.4 → AUTHENTIQUE       (vert)
+      0.4 – 0.6 → SUSPECT           (jaune)
+      0.6 – 0.8 → MANIPULATEUR      (orange)
+      0.8 – 1.0 → TRÈS MANIPULATEUR (rouge)
+
+2. SCORES PAR MODULE
+   → Score NLP          [0.0 → 1.0]
+   → Score Clickbait    [0.0 → 1.0]
+   → Score Urgence      [0.0 → 1.0]
+   → Score ManipNet     [0.0 → 1.0]
+
+3. TEXTE EXTRAIT
+   → Texte brut extrait de l'image par TrOCR
+   → Texte traduit en anglais (si français détecté)
+   → Classification du texte : Manipulateur ou Neutre
+
+4. BOUNDING BOXES
+   → Coordonnées [x1, y1, x2, y2] en pixels
+   → À afficher sur l'image originale
+   → Classe de chaque élément détecté + score confiance
+   → Exemple : button, toggle, timer, badge, popup
+
+5. VISUALISATIONS XAI (Explainable AI)
+   → 3 images heatmap à afficher :
+
+   a) Gradient Saliency
+      Colormap : Viridis (jaune → violet)
+      Ce que ça montre : quels pixels ont le plus influencé
+      la décision du modèle
+      Jaune = très influent | Violet = ignoré
+
+   b) Occlusion Sensitivity
+      Colormap : Inferno (jaune → noir)
+      Ce que ça montre : quelles zones de l'image sont critiques
+      Masquer une zone jaune change drastiquement le score
+      Jaune = critique | Noir = sans impact
+
+   c) Attention Rollout
+      Colormap : JET (rouge → bleu)
+      Ce que ça montre : quelles zones le modèle ViT regarde
+      pour prendre sa décision
+      Rouge = très regardé | Bleu = ignoré
+
+   → Chaque heatmap est une superposition sur l'image originale
+   → Accompagnée d'une description textuelle courte
+
+
+FORMAT DE DONNÉES ÉCHANGÉES (JSON)
+------------------------------------
+
+{
+  "score_global"   : 0.87,
+  "label"          : "TRÈS MANIPULATEUR",
+  "label_color"    : "#E53E3E",
+
+  "scores_modules" : {
+    "nlp"       : 0.997,
+    "clickbait" : 0.840,
+    "urgence"   : 0.600,
+    "manipnet"  : 0.870
+  },
+
+  "texte" : {
+    "extrait"     : "ABONNEZ-VOUS MAINTENANT -70%",
+    "traduit_en"  : "SUBSCRIBE NOW -70% LIMITED OFFER",
+    "score_nlp"   : 0.997,
+    "label_nlp"   : "Manipulateur"
+  },
+
+  "bounding_boxes" : [
+    { "class": "button", "score": 0.91, "box": [120, 45, 280, 90]  },
+    { "class": "toggle", "score": 0.78, "box": [300, 200, 380, 240] }
+  ],
+
+  "xai" : {
+    "gradient_saliency"  : "<image base64>",
+    "occlusion_map"      : "<image base64>",
+    "attention_rollout"  : "<image base64>"
+  }
+}
+
+
+FORMATS ACCEPTÉS EN INPUT
+---------------------------
+Images : JPG · PNG · WEBP · BMP
+Vidéos : MP4 · AVI  (→ extraction automatique de la première frame)
+
+
+POIDS DES MODÈLES (fichiers .pt à récupérer sur Kaggle)
+---------------------------------------------------------
+so1b_roberta_weights.pt   → Module 2 NLP
+so2_vit_best.pt           → Module 3 Clickbait
+so4_detr_best.pt          → Module 4 Urgence
+manipnet_best.pt          → Module 5 ManipNet
+manip_vocab.json          → Vocabulaire tokenizer ManipNet
+
+TrOCR (Module 1) → téléchargement automatique HuggingFace
+                   "microsoft/trocr-base-printed"
+
+================================================================

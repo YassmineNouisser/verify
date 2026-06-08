@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fact-check — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body class="fc-page">
+  <div id="site-header" data-slim="true"></div>
+
+  <main id="fc-detail-root">
+    <!-- Injected by script -->
+    <div style="padding:80px 24px;text-align:center;color:var(--ink-faint);">Loading…</div>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/fact-checks-data.js?v=3"></script>
+  <script>
+    function getQueryParam(key) {
+      const u = new URL(window.location.href);
+      return u.searchParams.get(key) || '';
+    }
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function renderNotFound() {
+      document.title = 'Fact-check not found — Verify';
+      document.getElementById('fc-detail-root').innerHTML = `
+        <div style="max-width:680px;margin:80px auto;padding:32px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);">
+          <h1 class="font-serif" style="font-size:32px;margin:0 0 12px;">Fact-check not found</h1>
+          <p style="color:var(--ink-soft);margin:0 0 20px;">This investigation may have been removed or the link is incorrect.</p>
+          <a href="real-or-fake.html" class="btn-primary">Browse all fact-checks</a>
+        </div>
+      `;
+    }
+
+    function renderDetail(fc) {
+      const v = VERDICT_META[fc.verdict];
+      document.title = `${fc.title} — Verify`;
+
+      const sourcesHtml = (fc.sources || []).map(s =>
+        `<li><a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label} ↗</a></li>`
+      ).join('');
+
+      const summaryHtml = (fc.summary || []).map(s => `<li>${s}</li>`).join('');
+      const bodyHtml    = (fc.body || []).map(p => `<p>${p}</p>`).join('');
+
+      // Related (same category, different slug)
+      const related = FACT_CHECKS
+        .filter(i => i.slug !== fc.slug && (i.category === fc.category || i.verdict === fc.verdict))
+        .slice(0, 3);
+
+      const relatedHtml = related.length ? `
+        <section class="fc-related">
+          <div class="container-x">
+            <h3>Related fact-checks</h3>
+            <div class="fc-related-grid">
+              ${related.map(r => {
+                const rv = VERDICT_META[r.verdict];
+                return `
+                  <a href="fact-check.html?slug=${encodeURIComponent(r.slug)}" class="fc-related-card">
+                    <div class="fc-related-thumb">
+                      <img src="${r.image}" alt="" loading="lazy" />
+                      <span class="fc-verdict-badge ${rv.cls}" style="top:10px;left:10px;font-size:10px;padding:4px 10px;">${rv.label}</span>
+                    </div>
+                    <h4>${r.title}</h4>
+                  </a>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </section>
+      ` : '';
+
+      document.getElementById('fc-detail-root').innerHTML = `
+        <section class="fc-detail-hero">
+          <div class="container-x">
+            <div class="fc-breadcrumb">
+              <a href="index.html">Home</a> ›
+              <a href="real-or-fake.html">Fact-Checks</a> ›
+              <span>${fc.category}</span>
+            </div>
+
+            <div class="fc-detail-meta">
+              <span class="fc-meta-pill cat">${fc.category}</span>
+              <span class="fc-meta-pill date">📅 ${fmtDate(fc.date)}</span>
+              <span class="fc-meta-pill read">⏱ ${fc.readTime} min read</span>
+            </div>
+
+            <h1>${fc.title}</h1>
+            <p class="fc-detail-author">By <strong>${fc.author}</strong> · Verify newsroom</p>
+
+            <div class="fc-verdict-banner ${v.cls}">
+              <div class="fc-vb-label">${v.label}</div>
+              <div class="fc-vb-desc">${v.desc}</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="fc-detail-body">
+          <aside class="fc-detail-aside">
+            <h4>Sources</h4>
+            <ul>${sourcesHtml || '<li style="color:var(--ink-faint);">—</li>'}</ul>
+
+            <h4>Share</h4>
+            <ul>
+              <li><a href="#" onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✓ Link copied';return false;">Copy link</a></li>
+              <li><a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(fc.title)}&url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener">Share on X</a></li>
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener">Share on Facebook</a></li>
+            </ul>
+
+            <h4>Report an error</h4>
+            <ul><li><a href="mailto:corrections@verify.tn">corrections@verify.tn</a></li></ul>
+          </aside>
+
+          <article class="fc-detail-main">
+            <img class="fc-hero-img" src="${fc.image}" alt="" />
+
+            <div class="fc-summary-box">
+              <h3>Key findings</h3>
+              <ul>${summaryHtml}</ul>
+            </div>
+
+            <h2>Our investigation</h2>
+            ${bodyHtml}
+
+            <div style="margin-top:32px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+              <span style="font-size:14px;color:var(--ink-soft);">Have new evidence about this claim?</span>
+              <a href="verifier.html" class="btn-primary">Submit it for review</a>
+            </div>
+          </article>
+        </div>
+
+        ${relatedHtml}
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = getQueryParam('slug');
+      const fc   = (window.FACT_CHECKS || []).find(i => i.slug === slug);
+      if (!fc) renderNotFound();
+      else renderDetail(fc);
+    });
+  </script>
+</body>
+</html>

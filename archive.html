@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifications archive — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body>
+  <div id="site-header" data-slim="true"></div>
+
+  <main class="container-x">
+    <section class="px-6 pt-10 pb-4">
+      <div class="text-sm text-gray-500 mb-2">
+        <a href="index.html" class="hover:underline">Home</a> ›
+        <a href="real-or-fake.html" class="hover:underline">Fact-checks</a> ›
+        <span>Archive</span>
+      </div>
+      <h1 class="font-serif" style="font-size:48px;line-height:1.05;margin:0 0 8px;">Verifications archive</h1>
+      <p class="text-gray-600 max-w-2xl">
+        All analyses published by our team, sorted by module and verdict.
+        412 reports in total.
+      </p>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+      <span class="text-xs uppercase tracking-wider text-gray-500 self-center pr-2">Module:</span>
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">AI-Generated</button>
+      <button class="filter-chip">Persuasion</button>
+      <button class="filter-chip">Coherence</button>
+      <button class="filter-chip">Forensics</button>
+      <button class="filter-chip">Caption Fidelity</button>
+      <button class="filter-chip">Cosmetic Ads</button>
+    </section>
+    <section class="filters">
+      <span class="text-xs uppercase tracking-wider text-gray-500 self-center pr-2">Verdict:</span>
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">Authentic</button>
+      <button class="filter-chip">Suspect</button>
+      <button class="filter-chip">Manipulated</button>
+      <button class="filter-chip">Out of context</button>
+      <span class="text-xs uppercase tracking-wider text-gray-500 self-center pl-4 pr-2">Period:</span>
+      <button class="filter-chip">7 days</button>
+      <button class="filter-chip active">30 days</button>
+      <button class="filter-chip">2026</button>
+      <button class="filter-chip">All</button>
+    </section>
+
+    <!-- Table of past analyses -->
+    <section class="px-6 py-6">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Reference</th>
+            <th>Title</th>
+            <th>Module</th>
+            <th>Score</th>
+            <th>Verdict</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Apr 27, 2026</td>
+            <td>VR-2026-0427-A93</td>
+            <td>Tunis flooding video (TikTok)</td>
+            <td>Coherence</td>
+            <td>34</td>
+            <td><span class="verdict-pill verdict-fake">Out of context</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 26, 2026</td>
+            <td>VR-2026-0426-B12</td>
+            <td>Viral "official" bank ad</td>
+            <td>Persuasion</td>
+            <td>22</td>
+            <td><span class="verdict-pill verdict-fake">Manipulated</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 26, 2026</td>
+            <td>VR-2026-0426-C45</td>
+            <td>Sfax protest photo</td>
+            <td>Forensics</td>
+            <td>48</td>
+            <td><span class="verdict-pill verdict-suspect">Suspect</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 25, 2026</td>
+            <td>VR-2026-0425-D78</td>
+            <td>Speech attributed to the Finance Minister</td>
+            <td>AI-Gen</td>
+            <td>67</td>
+            <td><span class="verdict-pill verdict-suspect">Suspect</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 24, 2026</td>
+            <td>VR-2026-0424-E33</td>
+            <td>Espérance image during the African title</td>
+            <td>Caption</td>
+            <td>91</td>
+            <td><span class="verdict-pill verdict-ok">Authentic</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 23, 2026</td>
+            <td>VR-2026-0423-F09</td>
+            <td>Municipal campaign poster (Sousse)</td>
+            <td>Forensics</td>
+            <td>54</td>
+            <td><span class="verdict-pill verdict-suspect">Suspect</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 22, 2026</td>
+            <td>VR-2026-0422-G22</td>
+            <td>"Photo" of Tunis-Carthage airport</td>
+            <td>AI-Gen</td>
+            <td>14</td>
+            <td><span class="verdict-pill verdict-fake">Manipulated</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 21, 2026</td>
+            <td>VR-2026-0421-H56</td>
+            <td>"New school opening" video in Kairouan</td>
+            <td>Caption</td>
+            <td>88</td>
+            <td><span class="verdict-pill verdict-ok">Authentic</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 20, 2026</td>
+            <td>VR-2026-0420-I91</td>
+            <td>Screenshot of an official statement</td>
+            <td>Persuasion</td>
+            <td>40</td>
+            <td><span class="verdict-pill verdict-suspect">Suspect</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 19, 2026</td>
+            <td>VR-2026-0419-J04</td>
+            <td>Real-estate ad (Instagram account)</td>
+            <td>Persuasion</td>
+            <td>30</td>
+            <td><span class="verdict-pill verdict-fake">Manipulated</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 18, 2026</td>
+            <td>VR-2026-0418-K17</td>
+            <td>Video shot in La Marsa (verified account)</td>
+            <td>AI-Gen</td>
+            <td>94</td>
+            <td><span class="verdict-pill verdict-ok">Authentic</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+          <tr>
+            <td>Apr 17, 2026</td>
+            <td>VR-2026-0417-L88</td>
+            <td>AI-generated landscape image (Tozeur)</td>
+            <td>AI-Gen</td>
+            <td>11</td>
+            <td><span class="verdict-pill verdict-fake">Manipulated</span></td>
+            <td><a href="resultats.html" class="text-navy underline">View</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="flex justify-center gap-2 py-10">
+      <button class="filter-chip">‹ Previous</button>
+      <button class="filter-chip active">1</button>
+      <button class="filter-chip">2</button>
+      <button class="filter-chip">3</button>
+      <button class="filter-chip">…</button>
+      <button class="filter-chip">35</button>
+      <button class="filter-chip">Next ›</button>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+</body>
+</html>

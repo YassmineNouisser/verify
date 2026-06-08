@@ -1,0 +1,340 @@
+% =====================================================================
+%  IO6 — Multimodal Fact-Checking Pipeline for Cosmetic Advertising
+%  Module report — AI Media Credibility Platform (CBL, Esprit)
+%  Structure follows the common template: IOX -- Module Name
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=blue}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{IO6 — Multimodal Fact-Checking Pipeline}
+\lhead{AI Media Credibility Platform}
+\cfoot{\thepage}
+
+\newcommand{\verdict}[1]{\texttt{#1}}
+
+\begin{document}
+
+% =====================================================================
+\section{IO6 -- Multimodal Fact-Checking Pipeline for Cosmetic Advertising}
+% =====================================================================
+
+\subsection{Objective}
+
+The goal of module IO6 is to design and integrate a \textbf{multimodal
+fact-checking pipeline} able to automatically analyse cosmetic advertisements
+(video) and produce a structured, explainable verdict
+(\verdict{TRUE} / \verdict{FALSE} / \verdict{TO\_VERIFY}) for every claim it
+detects. The system combines three information channels --- \emph{audio},
+\emph{visual} and \emph{textual} --- inside a single, reproducible chain, in full
+compliance with EU Regulation 655/2013 on cosmetic claims and Article~13 of the
+EU AI Act 2024 (right to explanation).
+
+\paragraph{Sub-objectives.}
+\begin{itemize}[noitemsep]
+  \item Extract spoken and on-screen claims from a video advertisement
+  (ASR + OCR + object detection).
+  \item Verify each claim against an expert knowledge base (309+ entries) and the
+  EU~655/2013 regulatory patterns.
+  \item Force a decisive verdict on ambiguous claims via a decisive
+  post-processor (ASA UK puffery jurisprudence).
+  \item Provide full explainability (LIME, SHAP-like, counterfactual, traceability
+  with EU article citations).
+  \item Automatically generate a PDF compliance report for regulatory officers.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection{Problem Definition}
+
+Cosmetic advertising is saturated with potentially misleading claims
+(``reduces wrinkles by 90\%'', ``clinically proven results'', ``100\% natural'').
+Manual screening of these claims by authorities is slow, costly and hard to scale
+given the volume of content being broadcast.
+
+\paragraph{Formulation.}
+Given a video advertisement $V$, the system must produce:
+\[
+  f(V) \;\longrightarrow\; \big\{ (c_i,\; y_i,\; p_i,\; E_i) \big\}_{i=1}^{n},
+  \qquad y_i \in \{\verdict{TRUE},\ \verdict{FALSE},\ \verdict{TO\_VERIFY}\}
+\]
+where $c_i$ is the extracted claim, $y_i$ the verdict, $p_i \in [0,1]$ the
+calibrated confidence and $E_i$ the explanation (salient words, severity,
+counterfactual, cited EU articles). A global verdict and an aggregated
+\emph{Trust Score} are also computed at the video level.
+
+\paragraph{Constraints.}
+\begin{itemize}[noitemsep]
+  \item \textbf{Multimodality} --- information is spread across the audio track,
+  on-screen text and visual elements (logos, packshots).
+  \item \textbf{Compliance} --- decisions must be traceable and aligned with
+  EU~655/2013 and the EU AI Act 2024 (Art.~13).
+  \item \textbf{Safety first} --- minimise false negatives on misleading claims
+  (\verdict{FALSE} recall is the priority).
+  \item \textbf{Resources} --- runs on a single GPU (Tesla T4 / P100,
+  $\sim$16~GB VRAM), $<\!90$~s per video.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection{Datasets Used}
+
+\paragraph{Knowledge Base.}
+Excel file \texttt{IO6\_Base\_Reference\_V3\_FULL\_ENRICHED.xlsx}: 309+ entries
+spread over 8 sheets, fully editable by domain experts.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.5cm} >{\raggedright\arraybackslash}p{9.5cm}}
+\toprule
+\textbf{Sheet} & \textbf{Content} \\
+\midrule
+Brands              & Reference pharmaceutical / cosmetic brands \\
+Fake claims         & Catalogue of known misleading claims \\
+EU~655/2013 patterns & Regulatory patterns (honesty, evidence, fairness, informed choice) \\
+Ingredients         & Active ingredients and admissible thresholds \\
+Certifications      & Valid labels and certifications \\
+ASA UK jurisprudence & Puffery cases (tolerated advertising exaggeration) \\
+\dots               & (8 sheets in total) \\
+\bottomrule
+\end{tabular}
+\caption{Structure of the IO6 knowledge base.}
+\end{table}
+
+\paragraph{Evaluation data.}
+\begin{itemize}[noitemsep]
+  \item \textbf{Validated curated cases} --- claims manually annotated against the
+  strict EU~655/2013 Gold Standard.
+  \item \textbf{Extended stratified sample} --- $N=30$ claims, inter-annotator
+  agreement Cohen's $\kappa = 1.0$.
+  \item \textbf{3-fold cross-validation} --- 100\% $\pm$ 0\%.
+  \item \textbf{Multi-video operational batch} --- several real advertisements
+  (F1 macro 92.5\%).
+  \item \textbf{Ablation study} --- successive removal of pipeline components.
+\end{itemize}
+
+\paragraph{CNN-from-scratch data (complementary deliverable).}
+A dataset of pharmaceutical / cosmetic logos annotated in PASCAL VOC XML format
+(50 logo classes) for PharmaLogoNet --- classification + bounding-box regression.
+
+% ---------------------------------------------------------------------
+\subsection{Preprocessing Pipeline}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, noitemsep]
+  \item \textbf{Video ingestion} ($V \to$ audio + frames) with \texttt{FFmpeg}:
+  audio track extraction (16~kHz mono) and key-frame sampling.
+  \item \textbf{Audio} --- transcription by \emph{Whisper medium} (ASR) $\to$
+  timestamped text + segmentation into candidate utterances.
+  \item \textbf{Vision} --- \emph{YOLOv8n} for object / packshot detection,
+  \texttt{OpenCV} + \texttt{Pillow} for cropping and normalising regions of
+  interest.
+  \item \textbf{On-screen text} --- \emph{EasyOCR} (CRAFT + CRNN) multilingual on
+  the frames $\to$ text strings + confidence scores.
+  \item \textbf{Fusion / cleaning} --- deduplication, Unicode normalisation,
+  confidence-threshold filtering, merging audio + OCR into unique claims $c_i$.
+  \item \textbf{Semantic embeddings} --- \emph{MiniLM-L12-v2} encodes every claim
+  and every knowledge-base entry (cosine-similarity retrieval).
+  \item \textbf{LLM prompt preparation} --- building the reasoning prompt for
+  \emph{Phi-3-mini-4k} (claim + KB context + EU patterns).
+\end{enumerate}
+
+\noindent\textit{Reproducibility:} fixed random seeds (42), open-source models,
+JSON exports of all intermediate results. Full schema: see
+\texttt{Pipeline\_IO6\_Architecture\_FINAL.png}.
+
+% ---------------------------------------------------------------------
+\subsection{Model Architecture}
+
+The pipeline orchestrates \textbf{six specialised models} (load $\to$ use $\to$
+unload to stay below $\sim$10~GB VRAM):
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{4.5cm} >{\raggedright\arraybackslash}p{2.4cm}}
+\toprule
+\textbf{Model} & \textbf{Type} & \textbf{Role} & \textbf{Source} \\
+\midrule
+Whisper medium       & Encoder--decoder Transformer & Speech-to-text (ASR)            & OpenAI \\
+YOLOv8n              & One-stage CNN detector       & Object / packshot detection     & Ultralytics \\
+EasyOCR              & CRAFT + CRNN                 & Multilingual OCR                & JaidedAI \\
+Phi-3-mini-4k        & Decoder-only Transformer     & LLM reasoning                   & Microsoft \\
+MiniLM-L12-v2        & Distilled BERT               & Semantic embeddings             & SBERT \\
+PharmaLogoNet        & Custom CNN (MobileNet-style) & Logo detection                  & from scratch \\
+MLP Calibration Head & Multi-layer perceptron       & Confidence calibration          & from scratch \\
+\bottomrule
+\end{tabular}
+\caption{Models composing the IO6 pipeline.}
+\end{table}
+
+\paragraph{Proprietary innovation — Decisive Post-Processor.}
+A module that forces a \verdict{TRUE}/\verdict{FALSE} verdict on claims rated
+ambiguous by the LLM, relying on the EU~655/2013 patterns and the ASA UK puffery
+jurisprudence.
+
+\paragraph{Calibration head (MLP, from scratch).}
+A small multi-layer perceptron that maps the raw LLM logits/scores to a calibrated
+probability $p_i$ (ECE --- Expected Calibration Error --- analysis).
+
+\paragraph{PharmaLogoNet (CNN from scratch, complementary deliverable).}
+MobileNet-inspired architecture: depthwise separable convolutions,
+$\sim$1.5~M parameters ($15\times$ lighter than ResNet-50), multi-task learning
+with two heads (50-class classification + bounding-box regression), GradCAM on the
+last convolutional layer.
+
+% ---------------------------------------------------------------------
+\subsection{Training Strategy}
+
+\begin{itemize}[noitemsep]
+  \item \textbf{Pretrained models} --- Whisper, YOLOv8n, EasyOCR, Phi-3 and
+  MiniLM are used as-is (zero-shot), without retraining.
+  \item \textbf{LoRA fine-tuning of Phi-3} --- domain adaptation to cosmetics on a
+  single GPU: rank $r=8$, $\alpha=16$ (PEFT library, quantization via
+  \texttt{bitsandbytes}).
+  \item \textbf{MLP calibration head} --- trained on the pipeline outputs to
+  minimise the calibration error; monitored with \textbf{six loss functions} ---
+  Cross-Entropy, Brier Score, MSE, MAE, KL Divergence, ECE.
+  \item \textbf{PharmaLogoNet (from scratch)} --- $\sim$12 epochs on Tesla T4
+  ($\sim$1~h), \textbf{adaptive AMP} (auto-detects GPU: P100, T4, V100, A100 $\to$
+  FP16/FP32), combined classification loss + custom \textbf{GIoU Loss}
+  (Rezatofighi, CVPR 2019); mAP@0.5 and mAP@0.5:0.95 metrics re-implemented in
+  COCO style without torchvision.
+  \item \textbf{Reproducibility} --- seed 42, JSON exports, Kaggle GPU
+  environment (T4 / P100 / V100).
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection{Explainability Mechanisms}
+
+In line with Article~13 of the EU AI Act 2024, the module provides an
+\textbf{XAI suite with four complementary methods}:
+
+\begin{enumerate}[label=\textbf{(\alph*)}, noitemsep]
+  \item \textbf{LIME} (Ribeiro et~al., 2016) --- highlights the words of the claim
+  that contribute most to the verdict.
+  \item \textbf{SHAP-like severity scoring} (inspired by Lundberg \& Lee, 2017) ---
+  a per-claim severity score, aggregated into a scatter plot.
+  \item \textbf{Counterfactual analysis} (Wachter et~al., 2018) --- ``what minimal
+  change would flip this verdict from \verdict{FALSE} to \verdict{TRUE}?''.
+  \item \textbf{Regulatory traceability} --- every verdict cites the EU~655/2013
+  article (or the ASA UK jurisprudence) that motivates it.
+\end{enumerate}
+
+\noindent For the CNN deliverable, visual explainability relies on \textbf{GradCAM}
+(Selvaraju et~al., 2017) applied to the last convolutional layer of
+PharmaLogoNet. A \textbf{PDF explainability report}
+(\texttt{Rapport\_Explicabilite\_IO6.pdf}) is generated per claim.
+
+% ---------------------------------------------------------------------
+\subsection{Experimental Results}
+
+\paragraph{Multimodal pipeline --- vs strict EU~655/2013 Gold Standard.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{l c c}
+\toprule
+\textbf{Metric} & \textbf{Score} & \textbf{``Excellent'' threshold} \\
+\midrule
+Accuracy                    & \textbf{92.9\%} & $\ge 85\%$ \\
+Precision (macro)           & \textbf{94.4\%} & $\ge 85\%$ \\
+Recall (macro)              & \textbf{91.7\%} & $\ge 85\%$ \\
+F1-score (macro)            & \textbf{92.5\%} & $\ge 85\%$ \\
+F1-score (weighted)         & \textbf{92.7\%} & $\ge 85\%$ \\
+F1 \verdict{TRUE}           & 90.9\%          & $\ge 85\%$ \\
+F1 \verdict{FALSE}          & 94.1\%          & $\ge 85\%$ \\
+Cohen's Kappa               & \textbf{1.0}    & $\ge 0.8$ \\
+Cross-validation (3-fold)   & \textbf{100\% $\pm$ 0\%} & stable \\
+\bottomrule
+\end{tabular}
+\caption{IO6 pipeline evaluation results.}
+\end{table}
+
+\paragraph{Key strengths.}
+\begin{itemize}[noitemsep]
+  \item Precision \verdict{TRUE} = 100\% (zero false positive on a legitimate
+  claim).
+  \item Recall \verdict{FALSE} = 100\% (no misleading claim missed --- a safety
+  criterion).
+  \item Conservative bias by design (safety-first approach for regulatory
+  compliance).
+\end{itemize}
+
+\paragraph{Computational cost.}
+$\sim$71~s per video on Tesla T4 (16~GB VRAM); $\sim$50 videos/hour on a single
+GPU; peak VRAM $\sim$10~GB (load $\to$ use $\to$ unload pattern).
+
+\paragraph{Evaluation artefacts.}
+\texttt{batch\_eval\_results.json}, \texttt{final\_model\_evaluation.json},
+\texttt{all\_metrics.json}, \texttt{confusion\_matrix\_normalized.png},
+\texttt{ablation\_study.png}; a 7-page analytical dashboard
+(\texttt{Dashboard\_Visuals\_Batch\_Loaded.pdf}) with 6 visualisations
+(Trust Score Gauge, Distribution Donut, confidence per claim, SHAP scatter,
+EU patterns frequency, verdict-source pie).
+
+% ---------------------------------------------------------------------
+\subsection{Discussion}
+
+\paragraph{Contributions.}
+IO6 shows that an assembly of lightweight open-source models, orchestrated with a
+decisive post-processor and an expert knowledge base, reaches ``excellent''-level
+performance ($>92\%$ macro F1, $\kappa = 1.0$) while remaining runnable on a
+single GPU and fully traceable with respect to EU law. The key innovation is the
+\emph{decisive post-processor} that removes the grey zone of ambiguous verdicts,
+together with the four-method XAI suite that makes every decision auditable.
+
+\paragraph{Limitations.}
+\begin{itemize}[noitemsep]
+  \item Knowledge-base coverage --- very new or niche claims may fall back to
+  \verdict{TO\_VERIFY}.
+  \item Dependence on ASR and OCR quality (audio noise, stylised fonts,
+  low-contrast burned-in subtitles).
+  \item Evaluation on a still limited corpus ($\kappa = 1.0$ but modest $N$) ---
+  large-scale generalisation to be confirmed.
+  \item Phi-3-mini --- reasoning bounded by model size; LoRA fine-tuning mitigates
+  but does not eliminate hallucinations.
+  \item Conservative bias --- excellent for safety, but may over-flag some
+  tolerated advertising exaggeration (puffery).
+\end{itemize}
+
+\paragraph{Future work (V2 roadmap).}
+\begin{itemize}[noitemsep]
+  \item Continuous, versioned enrichment of the knowledge base.
+  \item Visual-claim detection (faked before/after) via the CNN deliverable.
+  \item Multilingual and multi-sector expansion (food supplements, medical
+  devices).
+  \item Advanced calibration (temperature scaling, conformal prediction).
+  \item Integration with the rest of the \emph{AI Media Credibility} platform
+  (verification API, unified dashboard).
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection*{Key references}
+\begin{itemize}[noitemsep,leftmargin=*]
+  \item Hu et~al., 2022 --- \emph{LoRA: Low-Rank Adaptation of Large Language Models} (ICLR).
+  \item Ribeiro et~al., 2016 --- \emph{"Why Should I Trust You?": Explaining the Predictions of Any Classifier} (LIME).
+  \item Lundberg \& Lee, 2017 --- \emph{A Unified Approach to Interpreting Model Predictions} (SHAP).
+  \item Wachter et~al., 2018 --- \emph{Counterfactual Explanations Without Opening the Black Box}.
+  \item Selvaraju et~al., 2017 --- \emph{Grad-CAM: Visual Explanations from Deep Networks}.
+  \item Howard et~al., 2017 --- \emph{MobileNets: Efficient Convolutional Neural Networks for Mobile Vision}.
+  \item Rezatofighi et~al., 2019 --- \emph{Generalized Intersection over Union} (CVPR).
+  \item EU 655/2013 --- Commission Regulation laying down common criteria for the justification of claims used in relation to cosmetic products.
+  \item EU AI Act 2024 --- Article~13 on transparency and explainability of AI systems.
+\end{itemize}
+
+\end{document}

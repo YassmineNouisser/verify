@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statistics — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body>
+  <div id="site-header" data-slim="true"></div>
+
+  <!-- Hero -->
+  <section class="dash-hero">
+    <div class="container-x">
+      <div>
+        <h1>Platform Statistics</h1>
+        <p>Analysis volumes, verdicts and disinformation trends in Tunisia. Updated in real time.</p>
+      </div>
+      <div class="dash-period" role="tablist" aria-label="Period">
+        <button data-period="7j" class="active">7 days</button>
+        <button data-period="30j">30 days</button>
+        <button data-period="90j">90 days</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPIs -->
+  <section class="kpi-grid container-x" data-reveal-stagger>
+    <div class="kpi-card">
+      <span class="kpi-label">Total analyses</span>
+      <span class="kpi-value" data-kpi="analyses">889</span>
+      <span class="kpi-delta kpi-up">▲ 12.4% vs previous period</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Flagged as manipulated</span>
+      <span class="kpi-value" data-kpi="manipulated">38%</span>
+      <span class="kpi-delta kpi-up">▲ 3.1 pts</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Average analysis time</span>
+      <span class="kpi-value" data-kpi="latency">1m 24s</span>
+      <span class="kpi-delta kpi-down">▼ 18 seconds</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Partner fact-checks</span>
+      <span class="kpi-value" data-kpi="partners">126</span>
+      <span class="kpi-delta kpi-up">▲ Tunifact + iCheck</span>
+    </div>
+  </section>
+
+  <!-- Charts row -->
+  <section class="dash-row">
+    <div class="dash-card">
+      <h3>Analyses over time</h3>
+      <p class="dash-card-sub">Number of analyses launched per day, across all modules.</p>
+      <canvas id="chart-trend" height="120"></canvas>
+    </div>
+    <div class="dash-card">
+      <h3>Verdict breakdown</h3>
+      <p class="dash-card-sub">Over the selected period.</p>
+      <canvas id="chart-verdicts" height="120"></canvas>
+    </div>
+  </section>
+
+  <!-- Modules + Sources -->
+  <section class="dash-row">
+    <div class="dash-card">
+      <h3>Volume by module</h3>
+      <p class="dash-card-sub">Which modules are most used this week.</p>
+      <div class="dash-bars" id="dash-modules"></div>
+    </div>
+    <div class="dash-card">
+      <h3>Top sources of disinformation</h3>
+      <p class="dash-card-sub">Where flagged content originates.</p>
+      <ul class="dash-list">
+        <li><span>Facebook</span><strong>41%</strong></li>
+        <li><span>X / Twitter</span><strong>27%</strong></li>
+        <li><span>TikTok</span><strong>14%</strong></li>
+        <li><span>WhatsApp</span><strong>11%</strong></li>
+        <li><span>YouTube</span><strong>5%</strong></li>
+        <li><span>Other</span><strong>2%</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Hourly + Latest -->
+  <section class="dash-row">
+    <div class="dash-card">
+      <h3>Activity by hour</h3>
+      <p class="dash-card-sub">Peak submission times this week.</p>
+      <canvas id="chart-hourly" height="100"></canvas>
+    </div>
+    <div class="dash-card">
+      <h3>Latest analyses</h3>
+      <p class="dash-card-sub">Live feed.</p>
+      <ul class="dash-list">
+        <li><span>Caption Fidelity &amp; Coherence</span><strong>2 min ago</strong></li>
+        <li><span>AI-Generated Media</span><strong>6 min ago</strong></li>
+        <li><span>Photoshop Forensics</span><strong>18 min ago</strong></li>
+        <li><span>Cosmetic Ads</span><strong>25 min ago</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+  <script>
+    /* Dashboard data — mock. To plug a backend, replace each `getX()` with
+       a fetch() that returns the same shape. */
+    const DASHBOARD = {
+      '7j': {
+        analyses: 889, manipulated: '38%', latency: '1m 24s', partners: 126,
+        trend: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], data: [98, 124, 142, 138, 167, 121, 99] },
+        verdicts: { authentique: 39, suspect: 23, manipule: 31, hors: 7 },
+        hourly: { labels: Array.from({length:24}, (_,i)=>String(i).padStart(2,'0')+'h'),
+                  data: [4,3,2,2,2,3,5,9,15,21,28,32,30,27,29,34,40,38,33,26,18,12,8,6] },
+      },
+      '30j': {
+        analyses: 3412, manipulated: '36%', latency: '1m 31s', partners: 487,
+        trend: { labels: ['W1','W2','W3','W4'], data: [780, 812, 901, 919] },
+        verdicts: { authentique: 41, suspect: 22, manipule: 29, hors: 8 },
+        hourly: { labels: Array.from({length:24}, (_,i)=>String(i).padStart(2,'0')+'h'),
+                  data: [120,90,70,60,55,80,160,240,340,420,510,560,540,520,540,580,640,610,520,420,310,250,200,160] },
+      },
+      '90j': {
+        analyses: 9874, manipulated: '34%', latency: '1m 38s', partners: 1402,
+        trend: { labels: ['M-2','M-1','M'], data: [3120, 3340, 3414] },
+        verdicts: { authentique: 44, suspect: 20, manipule: 28, hors: 8 },
+        hourly: { labels: Array.from({length:24}, (_,i)=>String(i).padStart(2,'0')+'h'),
+                  data: [360,260,210,180,170,240,480,720,1020,1260,1530,1680,1620,1560,1620,1740,1920,1830,1560,1260,930,750,600,480] },
+      },
+    };
+    const MODULES_USAGE = [
+      { name: 'AI-Generated Media',   value: 247, color: '#5b21b6' },
+      { name: 'Manipulation & Persuasion', value: 89,  color: '#f59e0b' },
+      { name: 'Photoshop Forensics', value: 112, color: '#16a34a' },
+      { name: 'Caption Fidelity & Coherence', value: 367, color: '#0e7490' },
+      { name: 'Cosmetic Ads',        value: 74,  color: '#9a3412' },
+    ];
+
+    function renderModules() {
+      const max = Math.max(...MODULES_USAGE.map(m => m.value));
+      document.getElementById('dash-modules').innerHTML = MODULES_USAGE.map(m => `
+        <div class="dash-bar">
+          <span class="bar-label">${m.name}</span>
+          <span class="bar-track"><span class="bar-fill" style="width:${(m.value/max)*100}%;background:${m.color};"></span></span>
+          <span class="bar-value">${m.value}</span>
+        </div>
+      `).join('');
+    }
+
+    let trendChart, verdictsChart, hourlyChart;
+    function renderCharts(period) {
+      const d = DASHBOARD[period];
+
+      // KPIs
+      document.querySelector('[data-kpi="analyses"]').textContent     = d.analyses.toLocaleString('en-US');
+      document.querySelector('[data-kpi="manipulated"]').textContent  = d.manipulated;
+      document.querySelector('[data-kpi="latency"]').textContent      = d.latency;
+      document.querySelector('[data-kpi="partners"]').textContent     = d.partners.toLocaleString('en-US');
+
+      // Trend
+      if (trendChart) trendChart.destroy();
+      trendChart = new Chart(document.getElementById('chart-trend'), {
+        type: 'line',
+        data: {
+          labels: d.trend.labels,
+          datasets: [{
+            label: 'Analyses',
+            data: d.trend.data,
+            borderColor: '#052962', backgroundColor: 'rgba(5,41,98,0.1)',
+            tension: 0.35, fill: true, pointBackgroundColor: '#ffe500',
+            pointBorderColor: '#052962', pointBorderWidth: 2, pointRadius: 5,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#eef1f7' } }, x: { grid: { display: false } } },
+        },
+      });
+
+      // Verdicts (doughnut)
+      if (verdictsChart) verdictsChart.destroy();
+      verdictsChart = new Chart(document.getElementById('chart-verdicts'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Real', 'Suspect', 'Fake', 'Out of context'],
+          datasets: [{
+            data: [d.verdicts.authentique, d.verdicts.suspect, d.verdicts.manipule, d.verdicts.hors],
+            backgroundColor: ['#16a34a', '#f59e0b', '#dc2626', '#1e3a8a'],
+            borderWidth: 0,
+          }],
+        },
+        options: {
+          responsive: true, cutout: '62%',
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } } },
+        },
+      });
+
+      // Hourly (bar)
+      if (hourlyChart) hourlyChart.destroy();
+      hourlyChart = new Chart(document.getElementById('chart-hourly'), {
+        type: 'bar',
+        data: {
+          labels: d.hourly.labels,
+          datasets: [{
+            label: 'Submissions',
+            data: d.hourly.data,
+            backgroundColor: '#052962', borderRadius: 4,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#eef1f7' } }, x: { grid: { display: false }, ticks: { autoSkip: true, maxTicksLimit: 12 } } },
+        },
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderModules();
+      renderCharts('7j');
+      document.querySelectorAll('.dash-period button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.dash-period button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderCharts(btn.dataset.period);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

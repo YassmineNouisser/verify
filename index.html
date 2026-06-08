@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify — Tunisia's media-verification platform</title>
+  <meta name="description" content="Verify helps you tell what's real. Drop in an image, a video or a post and get a clear verdict in minutes — with the visual evidence behind it. Built with newsrooms and forensic researchers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- ============ HERO ============ -->
+  <header class="lux-hero">
+    <div class="lux-hero__bg"><img src="assets/img/deepfake-hero.jpg" alt="" /></div>
+    <div class="lux-hero__inner">
+      <div data-reveal style="max-width:780px;">
+        <span class="lux-hero__kicker">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          Tunisia's media-verification platform
+        </span>
+        <h1>Tell what's <span class="accent">real</span>.</h1>
+        <p class="lux-hero__lead">
+          Drop in an image, a video or a post and get a clear verdict in minutes —
+          with the visual evidence behind it. Built with newsrooms and forensic
+          researchers, powered by five specialised AI modules.
+        </p>
+        <div class="lux-hero__actions">
+          <a href="verifier.html" class="btn-yellow lux-shine">Verify a file →</a>
+          <a href="real-or-fake.html" class="btn-outline">Browse fact-checks</a>
+        </div>
+        <div class="lux-hero__stats">
+          <div class="s"><strong>412</strong><span>fact-checks this week</span></div>
+          <div class="s"><strong>5</strong><span>ways we check a story</span></div>
+          <div class="s"><strong>‹ 2 min</strong><span>average to a verdict</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ LIVE VERDICT TICKER ============ -->
+  <div class="ticker-bar">
+    <span class="ticker-label"><span class="pulse-dot"></span> Just verified</span>
+    <div class="marquee marquee--ticker" data-speed="80">
+      <div class="marquee__track" id="verdict-ticker"><!-- injected from FACT_CHECKS --></div>
+    </div>
+  </div>
+
+  <!-- Stats / social proof band -->
+  <section class="stats-band" data-reveal-stagger>
+    <div class="stat">
+      <div class="num" data-count-to="412">0</div>
+      <div class="lbl">Fact-checks this week</div>
+    </div>
+    <div class="stat">
+      <div class="num" data-count-to="38" data-count-suffix="%">0</div>
+      <div class="lbl">Content flagged as misleading</div>
+    </div>
+    <div class="stat">
+      <div class="num" data-count-to="5">0</div>
+      <div class="lbl">Ways we check a story</div>
+    </div>
+    <div class="stat">
+      <div class="num">‹ 2 min</div>
+      <div class="lbl">Average time to a verdict</div>
+    </div>
+  </section>
+
+  <!-- ============ VERIFY TOOLKIT — interactive showcase ============ -->
+  <section class="toolkit" data-reveal>
+    <div class="tk-head">
+      <div>
+        <span class="k">The Verify Toolkit</span>
+        <h2>Five ways to check what you're looking at</h2>
+      </div>
+      <a href="verifier.html" class="btn-outline">Explore all modules →</a>
+    </div>
+    <div class="tk-grid">
+      <div class="tk-list" id="tk-list"><!-- injected --></div>
+      <div class="tk-stage" id="tk-stage"><!-- injected --></div>
+    </div>
+  </section>
+
+  <script>
+    // Render the toolkit showcase: a directory of the five modules + a live
+    // preview panel that swaps as you hover. Module config comes from
+    // components.js (window.VERIFY_MODULES); imagery + copy + stats are here.
+    document.addEventListener('DOMContentLoaded', () => {
+      const list = document.getElementById('tk-list'), stage = document.getElementById('tk-stage');
+      if (!list || !stage || !window.VERIFY_MODULES) return;
+      const ARR = '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+      const META = {
+        io1: { img: 'assets/img/cover1.png?v=2', mc: '#5b21b6', name: 'AI-Generated Media Detection', tag: 'Catches images and videos produced by generative models.', desc: 'Spots images and videos made with AI tools — by reading dozens of subtle artifacts, spectral signatures and inconsistencies the eye cannot see.', badge: '★ Most used', stats: [['247','7-day runs'],['‹ 1 min','avg time']] },
+        io2: { img: 'assets/img/cover2.png?v=2', mc: '#b45309', name: 'Visual Manipulation & Persuasion', tag: 'How an ad or a piece of propaganda is trying to move you.', desc: 'Identifies the emotional-persuasion and visual-manipulation techniques used in ads and propaganda — biased framing, colour grading, dramatised zoom, false urgency cues.', stats: [['89','7-day runs'],['‹ 30 s','avg time']] },
+        io4: { img: 'assets/img/cover4.png?v=2', mc: '#15803d', name: 'Edited Photo Detection', tag: 'Has a photo been retouched or montaged — and exactly where?', desc: 'Detects local modifications on otherwise authentic photos — added or removed elements, cloning, photomontage, retouching — and pinpoints the areas concerned.', stats: [['112','7-day runs'],['‹ 40 s','avg time']] },
+        io5: { img: 'assets/img/cover5.png?v=2', mc: '#0f766e', name: 'Caption Fidelity', tag: 'How faithfully the words describe what is in the picture.', desc: 'Evaluates how faithfully a caption describes its visual content — flagging exaggerations, omissions and editorial framing. Built for journalists and editors.', stats: [['203','7-day runs'],['‹ 2 min','avg time']] },
+        io6: { img: 'assets/img/cover6.png?v=2', mc: '#9a3412', name: 'Cosmetic Ads Fact-Check', tag: 'Are a beauty ad’s promises true — checked against EU rules?', desc: 'Verifies the visual claims of cosmetic advertising: retouched before/after, deepfaked testimonials, misleading promises — checked against EU rules on cosmetic claims.', stats: [['74','7-day runs'],['‹ 90 s','avg time']] },
+      };
+      const mods = window.VERIFY_MODULES.map(m => ({ ...m, ...(META[m.id] || {}) }));
+
+      list.innerHTML = mods.map((m, i) => `
+        <a href="verifier-module.html?v=12&m=${m.id}" class="tk-row${i === 0 ? ' is-current' : ''}" data-i="${i}" style="--mc:${m.mc};">
+          <span class="tk-no">${String(i + 1).padStart(2, '0')}</span>
+          <span class="tk-tile" style="background:${m.bg};color:${m.fg};">${m.icon}</span>
+          <span class="tk-info"><h3>${m.name}</h3><p>${m.tag}</p></span>
+          <span class="tk-chev">${ARR}</span>
+        </a>`).join('');
+
+      stage.innerHTML = mods.map((m, i) => `
+        <div class="tk-panel${i === 0 ? ' is-active' : ''}" data-i="${i}" style="--mc:${m.mc};">
+          <div class="tk-pm">
+            <img src="${m.img}" alt="${m.name}" loading="lazy" />
+            <span class="tk-pm-tag"><span class="d"></span> Module ${String(i + 1).padStart(2, '0')} of 05</span>
+            <span class="tk-picon" style="color:${m.fg};">${m.icon}</span>
+          </div>
+          <div class="tk-pb">
+            <span class="tk-pno">${m.badge ? m.badge + ' · ' : ''}Verify Toolkit</span>
+            <h3>${m.name}</h3>
+            <p class="tk-lead">${m.desc}</p>
+            <div class="tk-pstats">${m.stats.map(s => `<div><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>
+            <a href="verifier-module.html?v=12&m=${m.id}" class="tk-cta">Run this module ${ARR}</a>
+          </div>
+        </div>`).join('');
+
+      const rows = [...list.querySelectorAll('.tk-row')], panels = [...stage.querySelectorAll('.tk-panel')];
+      const activate = (i) => {
+        rows.forEach((r, j) => r.classList.toggle('is-current', j === i));
+        panels.forEach((p, j) => p.classList.toggle('is-active', j === i));
+      };
+      rows.forEach((r, i) => {
+        r.addEventListener('mouseenter', () => activate(i));
+        r.addEventListener('focus', () => activate(i));
+      });
+    });
+  </script>
+
+  <!-- ============ CIRCULATING RIGHT NOW — auto-scroll image gallery ============ -->
+  <section style="padding:56px 0 60px;background:linear-gradient(180deg,#fff 0%, var(--bg-soft) 100%);">
+    <div class="lux-shead" data-reveal>
+      <span class="k">Circulating right now</span>
+      <h2>What Tunisia is sharing — and what's actually true</h2>
+      <p>A live wall of images and videos pulled from social feeds this week. Green = verified, red = fake, amber = out of context. Hover any row to pause it.</p>
+    </div>
+    <div class="lux-gallery" data-reveal>
+      <div class="marquee" data-speed="55"><div class="marquee__track" id="gallery-row-1"></div></div>
+      <div class="marquee" data-reverse="true" data-speed="48"><div class="marquee__track" id="gallery-row-2"></div></div>
+    </div>
+    <div style="text-align:center;margin-top:34px;">
+      <a href="real-or-fake.html" class="btn-outline">See every verdict →</a>
+    </div>
+  </section>
+
+  <!-- ============ LATEST FACT-CHECKS (Verify newsroom) ============ -->
+  <section class="partners-section" style="background:#fff;">
+    <div class="pn-head">
+      <div>
+        <span class="pn-kicker">Latest verdicts</span>
+        <h2>Recent fact-checks</h2>
+        <p class="pn-sub">
+          Real claims investigated by the Verify newsroom — classified
+          <strong style="color:#16a34a;">Real</strong>,
+          <strong style="color:#dc2626;">Fake</strong> or
+          <strong style="color:#92400e;">Not Verified</strong>.
+          Click any card to read the full investigation.
+        </p>
+      </div>
+      <a href="real-or-fake.html" class="btn-primary">Browse all fact-checks →</a>
+    </div>
+
+    <div class="pn-grid" id="home-fact-checks" data-reveal-stagger>
+      <!-- Injected by inline script -->
+    </div>
+  </section>
+
+  <!-- ============ TRUST LOGOS — auto-scroll ============ -->
+  <section class="lux-strip" data-reveal>
+    <div class="lux-strip__head"><p class="t">Cited &amp; used by newsrooms across Tunisia</p></div>
+    <div class="marquee marquee--logos" data-speed="55">
+      <div class="marquee__track">
+        <span class="mq-logo">Mosaïque FM</span>
+        <span class="mq-logo">La Presse</span>
+        <span class="mq-logo">Nawaat</span>
+        <span class="mq-logo">Inkyfada</span>
+        <span class="mq-logo">Tunisie Numérique</span>
+        <span class="mq-logo">Réalités</span>
+        <span class="mq-logo">Tunifact</span>
+        <span class="mq-logo">iCheck</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA BANNER ============ -->
+  <section class="lux-cta" data-reveal>
+    <div class="lux-cta__bg"><img src="assets/img/forensics.jpg" alt="" /></div>
+    <h2>Got something that doesn't look right?</h2>
+    <p>Don't share it yet. Run it through Verify first — image, video or a whole post — and see the evidence for yourself in under two minutes.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      <a href="verifier.html" class="btn-yellow lux-shine">Verify a file →</a>
+      <a href="methodologie.html" class="btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">How it works</a>
+    </div>
+  </section>
+
+  <main class="container-x">
+    <!-- Newsletter -->
+    <section class="newsletter">
+      <h2>Get our daily fact-checks in your inbox</h2>
+      <p>The Verify brief: 5 minutes to read, zero spin, just facts.</p>
+      <form onsubmit="event.preventDefault(); alert('Thanks — your signup will be confirmed by email shortly.')">
+        <input type="email" placeholder="your@email.tn" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/fact-checks-data.js?v=3"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const verdictCls = { real: 'is-real', fake: 'is-fake', unverified: 'is-warn', misleading: 'is-warn', 'out-of-context': 'is-warn' };
+      const verdictLabel = (v) => (window.VERDICT_META && VERDICT_META[v] && VERDICT_META[v].label)
+        || ({ misleading: 'Misleading', 'out-of-context': 'Out of context' }[v]) || v;
+
+      // --- helper: hydrate a marquee that was filled after components.js ran ---
+      const hydrateMarquee = (track, speed) => {
+        const html = track.innerHTML;
+        track.innerHTML = html + html;          // duplicate → seamless loop
+        track.dataset.cloned = 'true';
+        if (!reduceMotion) {
+          requestAnimationFrame(() => {
+            track.style.animationDuration = Math.max(18, (track.scrollWidth / 2) / speed) + 's';
+          });
+        }
+      };
+
+      // ---- pool of recently-circulating media (real Tunisian fact-checks) ----
+      const pool = [];
+      if (window.FACT_CHECKS) {
+        FACT_CHECKS.forEach(i => pool.push({
+          img: i.image, title: i.title, verdict: i.verdict, src: i.source || 'Verify',
+          href: 'fact-check.html?slug=' + encodeURIComponent(i.slug),
+        }));
+      }
+
+      // ---- 1) live verdict ticker ----
+      const ticker = document.getElementById('verdict-ticker');
+      if (ticker && pool.length) {
+        ticker.innerHTML = pool.slice(0, 10).map(p => `
+          <span class="mq-tick">
+            <span class="v ${verdictCls[p.verdict] || ''}">${verdictLabel(p.verdict)}</span>
+            <a href="${p.href}">${p.title}</a>
+          </span>`).join('');
+        hydrateMarquee(ticker, 80);
+      }
+
+      // ---- 2) gallery rows ----
+      const card = (p) => `
+        <a class="mq-card" href="${p.href}">
+          <img src="${p.img}" alt="" loading="lazy" />
+          <span class="mq-tag ${verdictCls[p.verdict] || ''}">${verdictLabel(p.verdict)}</span>
+          <span class="mq-cap">${p.title}</span>
+        </a>`;
+      if (pool.length) {
+        const half = Math.ceil(pool.length / 2);
+        const rowA = document.getElementById('gallery-row-1');
+        const rowB = document.getElementById('gallery-row-2');
+        if (rowA) { rowA.innerHTML = pool.slice(0, half).concat(pool).slice(0, 10).map(card).join(''); hydrateMarquee(rowA, 55); }
+        if (rowB) { rowB.innerHTML = pool.slice(half).concat(pool.slice().reverse()).slice(0, 10).map(card).join(''); hydrateMarquee(rowB, 48); }
+      }
+
+      // ---- 3) recent fact-checks grid (Verify newsroom) ----
+      const mount = document.getElementById('home-fact-checks');
+      if (mount && window.FACT_CHECKS) {
+        const top = FACT_CHECKS.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+        const fmt = (iso) => new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+        mount.innerHTML = top.map(i => {
+          const v = VERDICT_META[i.verdict];
+          return `
+            <a href="fact-check.html?slug=${encodeURIComponent(i.slug)}" class="pn-card">
+              <div class="pn-thumb">
+                <img src="${i.image}" alt="" loading="lazy" />
+                <span class="fc-verdict-badge ${v.cls}" style="top:12px;left:12px;">${v.label}</span>
+              </div>
+              <div class="pn-body">
+                <span class="pn-source" style="background:#dbeafe;color:#1e3a8a;">${i.category}</span>
+                <h3>${i.title}</h3>
+                <p>${i.excerpt}</p>
+                <div class="pn-meta">
+                  <span>${fmt(i.date)} · ${i.readTime} min read</span>
+                  <span class="pn-link">Read →</span>
+                </div>
+              </div>
+            </a>`;
+        }).join('');
+      }
+    });
+  </script>
+</body>
+</html>

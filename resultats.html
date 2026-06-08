@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis results — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body>
+  <div id="site-header" data-slim="true"></div>
+
+  <main class="container-x" style="max-width: 1100px;">
+    <section class="px-6 pt-10 pb-6">
+      <div class="text-sm text-gray-500 mb-3">
+        <a href="verifier.html" class="hover:underline">Verification</a> ›
+        <a href="verifier-module.html" class="hover:underline">AI-Generated Media</a> ›
+        <span>Report #VR-2026-0427-A93</span>
+      </div>
+
+      <div class="flex flex-wrap items-start justify-between gap-6">
+        <div>
+          <span class="module-badge" style="background:#ede9fe;color:#5b21b6;">Module: AI-Generated Media Detection</span>
+          <h1 class="font-serif" style="font-size:40px;line-height:1.05;margin:14px 0 6px;">
+            Analysis report #VR-2026-0427-A93
+          </h1>
+          <p class="text-gray-600">Analysis run on April 27, 2026 at 11:08 AM · Duration: 47 s · File: official_statement.mp4</p>
+        </div>
+        <a href="#" class="btn-yellow">⬇ Download PDF report</a>
+      </div>
+    </section>
+
+    <!-- Score + Verdict -->
+    <section class="px-6 py-6 border-t border-b" style="border-color:var(--line);">
+      <div class="score-wrap">
+        <div class="score-circle">
+          <canvas id="score-gauge" data-score="67" width="220" height="220"></canvas>
+          <div class="score-text">
+            <div class="num">67</div>
+            <div class="lbl">Score / 100</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <span class="verdict-pill verdict-suspect">⚠ Suspect</span>
+          <h2 class="font-serif" style="font-size:30px;margin:14px 0 8px;line-height:1.15;">
+            Significant facial-manipulation indicators detected
+          </h2>
+          <p class="text-gray-700" style="font-size:16px;line-height:1.6;">
+            The content shows several inconsistencies typical of a deepfake.
+            Without being able to conclude with 100% confidence, the analysis
+            recommends caution before any sharing or citation. Cross-check
+            with an independent verification via Image–Caption Coherence.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="px-6 py-6" data-tabs>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="resume">Summary</button>
+        <button class="tab-btn" data-tab="preuves">Visual evidence</button>
+        <button class="tab-btn" data-tab="explication">Detailed explanation</button>
+        <button class="tab-btn" data-tab="data">Technical data</button>
+        <button class="tab-btn" data-tab="dl">Download</button>
+      </div>
+
+      <!-- Summary -->
+      <div class="tab-panel active" data-tab="resume">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border p-5" style="border-color:var(--line);">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">Overall score</div>
+            <div class="font-serif text-3xl">67 / 100</div>
+            <div class="text-sm text-gray-600 mt-1">Below the confidence threshold (75)</div>
+          </div>
+          <div class="border p-5" style="border-color:var(--line);">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">Verdict</div>
+            <div class="font-serif text-3xl text-orange-warn">Suspect</div>
+            <div class="text-sm text-gray-600 mt-1">Likely manipulation but not confirmed</div>
+          </div>
+          <div class="border p-5" style="border-color:var(--line);">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">Flagged frames</div>
+            <div class="font-serif text-3xl">14 / 1,410</div>
+            <div class="text-sm text-gray-600 mt-1">Concentrated between 0:18 and 0:24</div>
+          </div>
+        </div>
+
+        <div class="sb-box why" style="margin-top:24px;">
+          <span class="sb-label">Why this score</span>
+          Three convergent signals: an absent blink over 4.2 seconds (abnormal
+          beyond 1.5 s), a lip-sync drift around 0:21, and fusion artifacts
+          on the left jawline. Conversely, lighting, pose and background
+          remain consistent — hence the absence of a definitive verdict.
+        </div>
+
+        <div class="sb-box big">
+          <span class="sb-label">Recommendation</span>
+          Before publication or citation: cross-check with Image–Caption
+          Coherence (source search) and Edited Photo Detection. If possible,
+          retrieve the original version from the cited source.
+        </div>
+      </div>
+
+      <!-- Visual evidence -->
+      <div class="tab-panel" data-tab="preuves">
+        <p class="text-gray-700 mb-5">Four key frames where the module flagged inconsistencies. Red zones mark suspect pixels.</p>
+        <div class="evidence-grid">
+          <div class="evidence-frame">
+            <span class="label">Frame 0:18</span>
+            <img src="https://images.unsplash.com/photo-1493882552576-fce827c6161e?auto=format&fit=crop&w=900&q=80" alt="" />
+            <div class="overlay" style="top:30%;left:25%;width:30%;height:35%;"></div>
+          </div>
+          <div class="evidence-frame">
+            <span class="label">Frame 0:21</span>
+            <img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80" alt="" />
+            <div class="overlay" style="top:38%;left:42%;width:22%;height:18%;"></div>
+          </div>
+          <div class="evidence-frame">
+            <span class="label">Frame 0:23</span>
+            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=900&q=80" alt="" />
+            <div class="overlay" style="top:25%;left:30%;width:40%;height:40%;"></div>
+          </div>
+          <div class="evidence-frame">
+            <span class="label">Frame 0:24</span>
+            <img src="https://images.unsplash.com/photo-1593115057322-e94b77572f20?auto=format&fit=crop&w=900&q=80" alt="" />
+            <div class="overlay" style="top:32%;left:36%;width:28%;height:22%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explanation -->
+      <div class="tab-panel" data-tab="explication">
+        <article class="prose max-w-none" style="font-size:16px;line-height:1.7;">
+          <h3 class="font-serif text-2xl mt-2 mb-3">Methodology applied</h3>
+          <p>The video was broken down into 1,410 frames. Each one was
+            checked on three fronts at once: locating the face, mapping its
+            features in fine detail, and measuring whether those features
+            stay consistent from one frame to the next — the kind of
+            steadiness a genuine recording keeps and an altered one tends to
+            lose.
+          </p>
+
+          <h3 class="font-serif text-2xl mt-6 mb-3">Detected indicators</h3>
+          <ul class="sb-bullets">
+            <li><strong>Blink anomaly</strong> between 0:17.8 and 0:22.0:
+              no blink detected over 4.2 seconds. Normal distribution is
+              around once every 4–6 seconds; a human rarely exceeds 3
+              seconds while speaking on camera.</li>
+            <li><strong>Lip-sync mismatch</strong> on the word "Tunisia"
+              at 0:21.4: amplitude of phonemes /ti/ /zi/ does not match
+              lip trajectory (delta: 87 ms).</li>
+            <li><strong>Blending traces</strong> on the left side of the
+              jaw between 0:23 and 0:24: an unnatural transition between
+              neighbouring areas, consistent with a swapped-in face.</li>
+          </ul>
+
+          <h3 class="font-serif text-2xl mt-6 mb-3">Counter-indicators (in favor of authenticity)</h3>
+          <ul class="sb-bullets">
+            <li>Lighting consistency maintained across the entire sequence.</li>
+            <li>Sensor noise (pattern noise) homogeneous, no abrupt break.</li>
+            <li>Eye reflections aligned with the main light source.</li>
+          </ul>
+
+          <h3 class="font-serif text-2xl mt-6 mb-3">Limits of the analysis</h3>
+          <p>Even a strong AI-generated-media detector cannot distinguish
+            a very high-quality deepfake from an authentic video shot in
+            unusual conditions (low light, aggressive compression, subject
+            fatigue). The 67/100 score reflects that uncertainty. For
+            confirmation, cross-checking with Image–Caption Coherence
+            (source search) remains essential.
+          </p>
+        </article>
+      </div>
+
+      <!-- Technical data -->
+      <div class="tab-panel" data-tab="data">
+        <h3 class="font-serif text-2xl mb-4">File metadata</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><th>File name</th><td>official_statement.mp4</td></tr>
+            <tr><th>Size</th><td>87.4 MB</td></tr>
+            <tr><th>Duration</th><td>00:00:47.12</td></tr>
+            <tr><th>Resolution</th><td>1920 × 1080 (16:9)</td></tr>
+            <tr><th>Frame rate</th><td>30 fps (constant)</td></tr>
+            <tr><th>Video codec</th><td>H.264 / AVC — High Profile L4.0</td></tr>
+            <tr><th>Audio codec</th><td>AAC LC — 48 kHz · stereo</td></tr>
+            <tr><th>Bitrate</th><td>14.2 Mbps (video) · 192 kbps (audio)</td></tr>
+            <tr><th>EXIF Date Created</th><td><span class="text-red-600 font-semibold">Missing ⚠</span></td></tr>
+            <tr><th>EXIF Software</th><td><span class="text-red-600 font-semibold">Missing ⚠</span></td></tr>
+            <tr><th>SHA-256 hash</th><td style="font-family:monospace;font-size:12px;">a7f4...d92e (62 chars)</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-serif text-2xl mt-8 mb-4">Detailed check scores</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Check</th><th>Score</th><th>Threshold</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Blink consistency</td><td>0.42</td><td>0.75</td><td><span class="text-orange-warn font-semibold">Suspect</span></td></tr>
+            <tr><td>Lip sync</td><td>0.58</td><td>0.80</td><td><span class="text-orange-warn font-semibold">Suspect</span></td></tr>
+            <tr><td>Blending traces</td><td>0.71</td><td>0.75</td><td><span class="text-orange-warn font-semibold">Suspect</span></td></tr>
+            <tr><td>Lighting consistency</td><td>0.89</td><td>0.75</td><td><span class="text-green-ok font-semibold">OK</span></td></tr>
+            <tr><td>Sensor noise</td><td>0.84</td><td>0.75</td><td><span class="text-green-ok font-semibold">OK</span></td></tr>
+            <tr><td>Eye reflections</td><td>0.78</td><td>0.75</td><td><span class="text-green-ok font-semibold">OK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Downloads -->
+      <div class="tab-panel" data-tab="dl">
+        <p class="text-gray-700 mb-6">Three report formats are available, depending on your usage.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border p-6 text-center" style="border-color:var(--line);">
+            <div class="text-5xl mb-3">📄</div>
+            <h4 class="font-serif text-xl mb-2">PDF report</h4>
+            <p class="text-sm text-gray-600 mb-4">Full printable document, designed for editorial sharing.</p>
+            <a href="#" class="btn-primary">Download PDF</a>
+          </div>
+          <div class="border p-6 text-center" style="border-color:var(--line);">
+            <div class="text-5xl mb-3">{ }</div>
+            <h4 class="font-serif text-xl mb-2">JSON data</h4>
+            <p class="text-sm text-gray-600 mb-4">Full structure of scores, frames and metadata for integration.</p>
+            <a href="#" class="btn-primary">Download JSON</a>
+          </div>
+          <div class="border p-6 text-center" style="border-color:var(--line);">
+            <div class="text-5xl mb-3">📊</div>
+            <h4 class="font-serif text-xl mb-2">CSV spreadsheet</h4>
+            <p class="text-sm text-gray-600 mb-4">Score per frame, ready to open in any spreadsheet for your own analysis.</p>
+            <a href="#" class="btn-primary">Download CSV</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Re-analysis CTA -->
+    <section class="px-6 py-10 border-t flex flex-wrap items-center justify-between gap-4" style="border-color:var(--line);">
+      <div>
+        <h3 class="font-serif text-2xl">Want to cross-check this result?</h3>
+        <p class="text-gray-600">Run an additional analysis on the same file with another module.</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="verifier-module.html?v=12&m=io5" class="btn-outline">Verify with Caption Fidelity &amp; Coherence</a>
+        <a href="verifier.html" class="btn-primary">All modules</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+</body>
+</html>

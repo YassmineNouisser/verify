@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body data-fab="off">
+  <div id="site-header" data-slim="true"></div>
+
+  <main class="auth-split">
+    <!-- Side panel: brand & value props -->
+    <aside class="auth-side">
+      <div>
+        <a href="index.html" style="font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-1px;">
+          Verify<span style="color:var(--yellow);">.</span>
+        </a>
+        <h2>Take back control of what you see online.</h2>
+        <p class="lede">
+          Sign in to archive your verifications, follow team reports, and
+          receive the daily Verify brief every morning.
+        </p>
+
+        <ul class="auth-features">
+          <li><span class="dot">✓</span><span><strong>Personal archive</strong><br/><span style="opacity:0.78;">Find all your reports in one click.</span></span></li>
+          <li><span class="dot">✓</span><span><strong>Targeted alerts</strong><br/><span style="opacity:0.78;">Follow a topic, get notified when it's verified.</span></span></li>
+          <li><span class="dot">✓</span><span><strong>Early access</strong><br/><span style="opacity:0.78;">First access to new modules before public release.</span></span></li>
+        </ul>
+      </div>
+
+      <div class="testimonial">
+        "I now check my visual sources only with Verify before publishing. It has become an editorial reflex."
+        <cite>— Inès, political journalist, La Presse</cite>
+      </div>
+    </aside>
+
+    <!-- Form side -->
+    <section class="auth-form-side">
+      <div class="auth-card">
+        <h1>Welcome back</h1>
+        <p class="sub">Glad to see you again. Continue your verification work.</p>
+
+        <form onsubmit="event.preventDefault(); alert('Coming soon — sign-in will be available very shortly.')">
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" required placeholder="you@email.tn" />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" required placeholder="••••••••" />
+          </div>
+
+          <div class="flex items-center justify-between mb-5 text-sm">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" /> Remember me
+            </label>
+            <a href="#" class="text-navy hover:underline">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-primary w-full" style="width:100%;padding:14px;font-size:15px;">Sign in</button>
+
+          <div class="my-6 flex items-center gap-3 text-xs text-gray-500">
+            <div class="flex-1 h-px bg-gray-200"></div>
+            <span>OR</span>
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" class="btn-outline" style="padding:12px;font-size:13px;">Google</button>
+            <button type="button" class="btn-outline" style="padding:12px;font-size:13px;">Apple</button>
+          </div>
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+          Not registered yet? <a href="inscription.html" class="text-navy font-semibold hover:underline">Create an account</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+</body>
+</html>

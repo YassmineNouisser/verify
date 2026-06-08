@@ -1,0 +1,73 @@
+# ─── Secrets (NEVER commit) ──────────────────────────────────────────────
+.env
+.env.local
+backend/data/openai_key.txt
+*.key
+*.pem
+secrets/
+credentials.json
+google-services.json
+
+# ─── Python ───────────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ─── Trained model weights (downloaded via scripts/download_models.py) ────
+# GitHub blocks files > 100 MB; combined model size is ~250 MB+
+*.pth
+*.pt
+*.onnx
+*.h5
+*.keras
+*.bin
+*.safetensors
+
+# Exception: small generic YOLO weights that are useful to ship if small enough
+!yolov8n.pt
+
+# ─── HuggingFace / cache ──────────────────────────────────────────────────
+.cache/
+~/.cache/huggingface/
+
+# ─── OS / IDE ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ─── Jupyter ──────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_meta
+
+# ─── Build / dist ─────────────────────────────────────────────────────────
+dist/
+build/
+node_modules/
+
+# ─── Temporary / logs ─────────────────────────────────────────────────────
+*.log
+*.tmp
+tmp/
+/temp/
+.tox/
+
+# ─── Personal scratch files ───────────────────────────────────────────────
+test_local.py
+notes.md
+
+# Contributor notebooks (kept locally — too large for HF Space git, ~40 MB combined)
+malek/*.ipynb
+rayen/*.ipynb
+youssef/*.ipynb
+yassmine/*.ipynb

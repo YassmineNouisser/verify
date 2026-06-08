@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fact-Checks — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body class="fc-page">
+  <div id="site-header" data-slim="true"></div>
+
+  <!-- Toolbar -->
+  <section class="fc-toolbar">
+    <div class="container-x">
+      <div>
+        <h1>Fact-Checks</h1>
+        <p class="fc-sub">Browse all claims investigated by the Verify newsroom — sorted by date and verdict.</p>
+      </div>
+      <form class="fc-search" onsubmit="event.preventDefault(); applyFilters();">
+        <input id="fc-search-input" type="text" placeholder="Search a claim, a topic…" />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Verdict tabs -->
+  <div class="fc-tabs" role="tablist" id="fc-tabs"></div>
+
+  <!-- Layout: feed + sidebar -->
+  <main class="fc-layout">
+    <div class="fc-feed" id="fc-feed" data-reveal-stagger>
+      <!-- injected -->
+    </div>
+
+    <aside class="fc-side">
+      <div class="fc-side-block">
+        <h3>Latest fake claims</h3>
+        <ul class="fc-side-list" id="fc-latest-fake"></ul>
+      </div>
+
+      <div class="fc-side-block">
+        <h3>Browse by category</h3>
+        <ul class="fc-side-list" id="fc-categories" style="display:flex;flex-direction:column;gap:6px;"></ul>
+      </div>
+
+      <div class="fc-submit-card">
+        <h3>Spotted a suspicious claim?</h3>
+        <p>Submit a link, screenshot, or message and our team will investigate.</p>
+        <a href="verifier.html" class="btn-yellow">Submit for review</a>
+      </div>
+    </aside>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/fact-checks-data.js?v=3"></script>
+  <script>
+    const VERDICTS = [
+      { id: 'all',        label: 'All',          tabClass: '' },
+      { id: 'fake',       label: 'False',        tabClass: 'fake' },
+      { id: 'misleading', label: 'Misleading',   tabClass: 'misl' },
+      { id: 'real',       label: 'Real',         tabClass: 'real' },
+      { id: 'unverified', label: 'Not Verified', tabClass: 'unver' },
+    ];
+
+    function getQueryParam(key) {
+      const u = new URL(window.location.href);
+      return u.searchParams.get(key) || '';
+    }
+    function setQueryParam(key, val) {
+      const u = new URL(window.location.href);
+      if (val) u.searchParams.set(key, val); else u.searchParams.delete(key);
+      window.history.replaceState({}, '', u.toString());
+    }
+
+    let currentVerdict = getQueryParam('v') || 'all';
+    let currentSearch  = getQueryParam('q') || '';
+
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function renderTabs() {
+      const counts = { all: FACT_CHECKS.length };
+      FACT_CHECKS.forEach(fc => counts[fc.verdict] = (counts[fc.verdict] || 0) + 1);
+      const html = VERDICTS.map(v => `
+        <a href="#" class="fc-tab ${v.tabClass} ${currentVerdict === v.id ? 'active' : ''}" data-verdict="${v.id}">
+          ${v.label}
+          <span class="fc-tab-count">${counts[v.id] || 0}</span>
+        </a>
+      `).join('');
+      document.getElementById('fc-tabs').innerHTML = html;
+      document.querySelectorAll('#fc-tabs .fc-tab').forEach(t => {
+        t.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentVerdict = t.dataset.verdict;
+          setQueryParam('v', currentVerdict === 'all' ? '' : currentVerdict);
+          renderTabs();
+          renderFeed();
+        });
+      });
+    }
+
+    function renderFeed() {
+      let items = FACT_CHECKS.slice();
+      if (currentVerdict !== 'all') items = items.filter(i => i.verdict === currentVerdict);
+      if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        items = items.filter(i =>
+          i.title.toLowerCase().includes(q) ||
+          i.excerpt.toLowerCase().includes(q) ||
+          i.category.toLowerCase().includes(q)
+        );
+      }
+      items.sort((a, b) => b.date.localeCompare(a.date));
+
+      const feed = document.getElementById('fc-feed');
+      if (!items.length) {
+        feed.innerHTML = `<div class="fc-empty">No fact-check matches your filters yet.</div>`;
+        return;
+      }
+      feed.innerHTML = items.map(i => {
+        const v = VERDICT_META[i.verdict];
+        return `
+          <a href="fact-check.html?slug=${encodeURIComponent(i.slug)}" class="fc-card ${i.verdict}">
+            <div class="fc-card-thumb">
+              <img src="${i.image}" alt="" loading="lazy" />
+              <span class="fc-verdict-badge ${v.cls}">${v.label}</span>
+            </div>
+            <div class="fc-card-body">
+              <div class="fc-card-meta">
+                <span class="fc-meta-pill cat">${i.category}</span>
+                <span class="fc-meta-pill date">📅 ${fmtDate(i.date)}</span>
+                <span class="fc-meta-pill read">⏱ ${i.readTime} min</span>
+              </div>
+              <h2>${i.title}</h2>
+              <p>${i.excerpt}</p>
+              <span class="fc-card-cta">Read full investigation</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function renderSidebar() {
+      // Latest fakes
+      const fakes = FACT_CHECKS.filter(i => i.verdict === 'fake').slice(0, 4);
+      document.getElementById('fc-latest-fake').innerHTML = fakes.map(i => `
+        <li><a href="fact-check.html?slug=${encodeURIComponent(i.slug)}">
+          <img src="${i.image}" alt="" loading="lazy" />
+          <span>
+            <span class="side-title">${i.title}</span>
+            <span class="side-meta">${fmtDate(i.date)} · ${i.category}</span>
+          </span>
+        </a></li>
+      `).join('');
+
+      // Categories
+      const cats = {};
+      FACT_CHECKS.forEach(i => cats[i.category] = (cats[i.category] || 0) + 1);
+      document.getElementById('fc-categories').innerHTML = Object.entries(cats)
+        .sort((a,b) => b[1]-a[1])
+        .map(([cat, n]) => `
+          <li style="display:block;"><a href="?q=${encodeURIComponent(cat)}" style="display:flex;justify-content:space-between;padding:8px 10px;border-radius:6px;background:#f4f5f8;text-decoration:none;color:var(--ink);font-size:13px;font-weight:600;">
+            <span>${cat}</span>
+            <strong style="color:var(--navy);">${n}</strong>
+          </a></li>
+        `).join('');
+    }
+
+    function applyFilters() {
+      currentSearch = document.getElementById('fc-search-input').value.trim();
+      setQueryParam('q', currentSearch);
+      renderFeed();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('fc-search-input').value = currentSearch;
+      renderTabs();
+      renderFeed();
+      renderSidebar();
+    });
+  </script>
+</body>
+</html>

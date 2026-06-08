@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify a File — Verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=32" />
+</head>
+<body>
+  <div id="site-header" data-slim="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <header class="lux-hero lux-hero--split">
+    <div class="lux-hero__bg"><img src="assets/img/forensics.jpg" alt="" /></div>
+    <div class="lux-hero__inner">
+      <div data-reveal>
+        <span class="lux-hero__kicker">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          Verify a File
+        </span>
+        <h1>Drop in a media.<br />Get the <span class="accent">evidence</span> behind it.</h1>
+        <p class="lux-hero__lead">
+          Five specialised modules read an image, a video or a post the way a forensic
+          analyst would — pixel by pixel, frame by frame, caption included — and hand you
+          a clear verdict with the proof attached.
+        </p>
+        <div class="lux-hero__actions">
+          <a href="#modules" class="btn-yellow lux-shine">Pick a module ↓</a>
+          <a href="methodologie.html" class="btn-outline">Read the methodology</a>
+        </div>
+        <div class="lux-hero__stats">
+          <div class="s"><strong>889</strong><span>analyses · last 7 days</span></div>
+          <div class="s"><strong>5</strong><span>analysis modules</span></div>
+          <div class="s"><strong>‹ 2 min</strong><span>to a verdict</span></div>
+        </div>
+      </div>
+      <figure class="lux-hero__figure" data-reveal>
+        <img src="assets/img/deepfake-hero.jpg" alt="Forensic analysis of a video frame" />
+        <figcaption class="fig-tag"><span class="dot"></span> Live: face-swap analysis in progress…</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <!-- ============ MODULE FINDER ============ -->
+  <section class="finder">
+    <div class="container">
+      <span class="kicker">
+        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Find your tool
+      </span>
+      <h2>Which module fits your content?</h2>
+      <p class="lead">Pick the situation that matches yours — we route you to the right module in one click.</p>
+      <div class="use-cases" data-reveal-stagger>
+        <a href="verifier-module.html?v=12&m=io1" class="uc" style="--uc-c:#a78bfa;">
+          <span class="uc-thumb"><img src="assets/img/cover1.png?v=2" alt="" loading="lazy" /></span>
+          <span class="uc-text">
+            <span class="uc-title">A photo or video that may be a deepfake or AI-generated</span>
+            <span class="uc-reco">Deepfake Video Detection <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </span>
+        </a>
+        <a href="verifier-module.html?v=12&m=io2" class="uc" style="--uc-c:#fbbf24;">
+          <span class="uc-thumb"><img src="assets/img/cover2.png?v=2" alt="" loading="lazy" /></span>
+          <span class="uc-text">
+            <span class="uc-title">An ad or video with strong emotional pull</span>
+            <span class="uc-reco">Manipulation &amp; Persuasion <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </span>
+        </a>
+        <a href="verifier-module.html?v=12&m=io4" class="uc" style="--uc-c:#4ade80;">
+          <span class="uc-thumb"><img src="assets/img/cover4.png?v=2" alt="" loading="lazy" /></span>
+          <span class="uc-text">
+            <span class="uc-title">A photo that may have been retouched</span>
+            <span class="uc-reco">Edited Photo Detection <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </span>
+        </a>
+        <a href="verifier-module.html?v=12&m=io5" class="uc" style="--uc-c:#5eead4;">
+          <span class="uc-thumb"><img src="assets/img/cover5.png?v=2" alt="" loading="lazy" /></span>
+          <span class="uc-text">
+            <span class="uc-title">A post whose caption exaggerates, omits or doesn't match the picture</span>
+            <span class="uc-reco">Caption Fidelity <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </span>
+        </a>
+        <a href="verifier-module.html?v=12&m=io6" class="uc" style="--uc-c:#fb923c;">
+          <span class="uc-thumb"><img src="assets/img/cover6.png?v=2" alt="" loading="lazy" /></span>
+          <span class="uc-text">
+            <span class="uc-title">A cosmetic ad with bold "before / after"</span>
+            <span class="uc-reco">Cosmetic Ads Fact-Check <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE FIVE MODULES ============ -->
+  <main>
+    <section style="padding:56px 0 8px;" id="modules">
+      <div class="lux-shead" data-reveal>
+        <span class="k">The Verify Toolkit</span>
+        <h2>Five ways to check what you're looking at</h2>
+        <p>Each module is specialised for one kind of manipulation — from the raw pixel up to the words around it. Run several on the same file to cross-check the verdicts.</p>
+      </div>
+
+      <div class="modules-lux" data-reveal-stagger>
+        <!-- io1 -->
+        <a href="verifier-module.html?v=12&m=io1" class="mod-card" style="--mc:#5b21b6;">
+          <div class="mod-card__media">
+            <img src="assets/img/cover1.png?v=2" alt="Deepfake video detection" loading="lazy" />
+            <span class="mod-card__badge">★ Most used</span>
+            <span class="mod-card__icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4"/><path d="M5 21c0-3.866 3.134-7 7-7s7 3.134 7 7"/><path d="M9 9h.01M15 9h.01" stroke-width="2.5"/></svg></span>
+          </div>
+          <div class="mod-card__body">
+            <span class="mod-card__no">Module 01</span>
+            <h3>Fake Media Detection</h3>
+            <p class="mod-card__sub">Tells you whether the face in a video is genuine or has been replaced — with the face areas behind the verdict and a plain-language explanation.</p>
+            <p class="mod-card__formats">MP4 · MOV · AVI</p>
+            <div class="mod-card__meta">
+              <div class="mod-card__stats"><span><b>247</b>7-day</span></div>
+              <span class="mod-card__cta">Analyze <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- io2 -->
+        <a href="verifier-module.html?v=12&m=io2" class="mod-card" style="--mc:#b45309;">
+          <div class="mod-card__media">
+            <img src="assets/img/cover2.png?v=2" alt="Visual manipulation and persuasion" loading="lazy" />
+            <span class="mod-card__icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></span>
+          </div>
+          <div class="mod-card__body">
+            <span class="mod-card__no">Module 02</span>
+            <h3>Visual Manipulation &amp; Persuasion</h3>
+            <p class="mod-card__sub">Identifies emotional-persuasion and visual-manipulation techniques used in ads and propaganda — biased framing, colour grading, emotional zoom.</p>
+            <p class="mod-card__formats">JPG · PNG · MP4 · up to 50 MB</p>
+            <div class="mod-card__meta">
+              <div class="mod-card__stats"><span><b>89</b>7-day</span></div>
+              <span class="mod-card__cta">Analyze <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- io4 -->
+        <a href="verifier-module.html?v=12&m=io4" class="mod-card" style="--mc:#15803d;">
+          <div class="mod-card__media">
+            <img src="assets/img/cover4.png?v=2" alt="Edited photo detection" loading="lazy" />
+            <span class="mod-card__icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6" stroke-width="1.5"/></svg></span>
+          </div>
+          <div class="mod-card__body">
+            <span class="mod-card__no">Module 03</span>
+            <h3>Edited Photo Detection</h3>
+            <p class="mod-card__sub">Detects local modifications on otherwise authentic photos — added or removed elements, cloning, photomontage, retouching — and pinpoints the areas.</p>
+            <p class="mod-card__formats">JPG · PNG · TIFF · RAW</p>
+            <div class="mod-card__meta">
+              <div class="mod-card__stats"><span><b>112</b>7-day</span></div>
+              <span class="mod-card__cta">Analyze <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- io5 -->
+        <a href="verifier-module.html?v=12&m=io5" class="mod-card" style="--mc:#0f766e;">
+          <div class="mod-card__media">
+            <img src="assets/img/cover5.png?v=2" alt="Image–caption coherence and fidelity" loading="lazy" />
+            <span class="mod-card__icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6M7 17h4"/><circle cx="16.5" cy="14.5" r="2.5" fill="none"/></svg></span>
+          </div>
+          <div class="mod-card__body">
+            <span class="mod-card__no">Module 04</span>
+            <h3>Caption Fidelity</h3>
+            <p class="mod-card__sub">Evaluates how faithfully a caption describes its visual content. Detects exaggerations, omissions and editorial framing — built for journalists.</p>
+            <p class="mod-card__formats">JPG · PNG · MP4 · post URL</p>
+            <div class="mod-card__meta">
+              <div class="mod-card__stats"><span><b>203</b>7-day</span></div>
+              <span class="mod-card__cta">Analyze <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- io6 -->
+        <a href="verifier-module.html?v=12&m=io6" class="mod-card" style="--mc:#9a3412;">
+          <div class="mod-card__media">
+            <img src="assets/img/cover6.png?v=2" alt="Cosmetic ads fact-check" loading="lazy" />
+            <span class="mod-card__icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 10v4a1 1 0 001 1h3l5 4V5L7 9H4a1 1 0 00-1 1z"/><path d="M16 8a5 5 0 010 8M19 5a8 8 0 010 14"/></svg></span>
+          </div>
+          <div class="mod-card__body">
+            <span class="mod-card__no">Module 05</span>
+            <h3>Cosmetic Product Fact-Checking</h3>
+            <p class="mod-card__sub">Verifies the visual claims of cosmetic advertising: retouched before/after, deepfaked testimonials, misleading promises — checked against EU rules.</p>
+            <p class="mod-card__formats">MP4 · MOV · JPG · ad URL</p>
+            <div class="mod-card__meta">
+              <div class="mod-card__stats"><span><b>74</b>7-day</span></div>
+              <span class="mod-card__cta">Analyze <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ AUTO-SCROLLING STRIP: recently analyzed ============ -->
+    <section class="lux-strip on-navy" style="margin-top:48px;" data-reveal>
+      <div class="lux-strip__head">
+        <p class="t" style="color:#fff;">Recently put through Verify</p>
+        <span class="s">A live sample of media our newsroom and users ran this week — hover to pause.</span>
+      </div>
+      <div class="marquee" data-speed="65">
+        <div class="marquee__track" id="recent-marquee"><!-- injected from FACT_CHECKS --></div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="px-6 py-14 bg-beige" style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+      <div class="lux-shead" data-reveal>
+        <span class="k">How it works</span>
+        <h2>Three steps to a verdict</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto" data-reveal-stagger>
+        <div style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Playfair Display',serif;font-size:22px;margin:0 auto;">1</div>
+          <h3 class="font-serif text-xl mt-4 mb-2">Pick a module</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Choose the module that fits your content, or use the finder above to be routed automatically.</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Playfair Display',serif;font-size:22px;margin:0 auto;">2</div>
+          <h3 class="font-serif text-xl mt-4 mb-2">Upload the content</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Drag-and-drop your file or paste a link. Everything stays confidential and encrypted in transit.</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Playfair Display',serif;font-size:22px;margin:0 auto;">3</div>
+          <h3 class="font-serif text-xl mt-4 mb-2">Read the report</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">A clear verdict, a confidence score and the visual evidence behind it. Export it as a PDF.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRUST LOGOS MARQUEE ============ -->
+    <section class="lux-strip" data-reveal>
+      <div class="lux-strip__head"><p class="t">Cited &amp; used by newsrooms across Tunisia</p></div>
+      <div class="marquee marquee--logos" data-speed="55">
+        <div class="marquee__track">
+          <span class="mq-logo">Mosaïque FM</span>
+          <span class="mq-logo">La Presse</span>
+          <span class="mq-logo">Nawaat</span>
+          <span class="mq-logo">Inkyfada</span>
+          <span class="mq-logo">Tunisie Numérique</span>
+          <span class="mq-logo">Réalités</span>
+          <span class="mq-logo">Tunifact</span>
+          <span class="mq-logo">iCheck</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA BANNER ============ -->
+    <section class="lux-cta" data-reveal>
+      <div class="lux-cta__bg"><img src="assets/img/ai-generative.jpg" alt="" /></div>
+      <h2>Not sure which module you need?</h2>
+      <p>Our methodology page walks through every signal each module looks at — and the limits of what AI verification can, and can't, prove.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="methodologie.html" class="btn-yellow lux-shine">Read the methodology</a>
+        <a href="real-or-fake.html" class="btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">Browse fact-checks</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/fact-checks-data.js?v=3"></script>
+  <script>
+    // Populate the "recently analyzed" marquee from the fact-checks dataset.
+    document.addEventListener('DOMContentLoaded', () => {
+      const mount = document.getElementById('recent-marquee');
+      if (!mount || !window.FACT_CHECKS) return;
+      const items = FACT_CHECKS.slice()
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 9);
+      const cls = { real: 'is-real', fake: 'is-fake', misleading: 'is-warn', unverified: 'is-warn' };
+      const card = i => {
+        const v = (window.VERDICT_META && VERDICT_META[i.verdict]) || { label: i.verdict };
+        return `
+          <a class="mq-card" href="fact-check.html?slug=${encodeURIComponent(i.slug)}">
+            <img src="${i.image}" alt="" loading="lazy" />
+            <span class="mq-tag ${cls[i.verdict] || ''}">${v.label}</span>
+            <span class="mq-cap">${i.title}</span>
+          </a>`;
+      };
+      const html = items.map(card).join('');
+      mount.innerHTML = html + html;          // duplicate → seamless loop
+      mount.dataset.cloned = 'true';
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        requestAnimationFrame(() => {
+          mount.style.animationDuration = Math.max(20, (mount.scrollWidth / 2) / 65) + 's';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
