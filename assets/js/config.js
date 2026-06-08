@@ -33,6 +33,10 @@
     window.VERIFY_API_URL = 'http://localhost:8000';
   } else {
     // HF Space, GitHub Pages with same-domain backend, or any deployed environment.
-    window.VERIFY_API_URL = '';
+    // Use window.location.origin (NOT empty string) — because modules use the pattern
+    //   `(window.VERIFY_API_URL || 'http://localhost:8000')`
+    // and '' is falsy in JavaScript, so the fallback to localhost would kick in. With the
+    // explicit origin (e.g. "https://yassmine1211-verify.hf.space") the OR keeps it intact.
+    window.VERIFY_API_URL = window.location.origin;
   }
 })();

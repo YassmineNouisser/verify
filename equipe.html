@@ -16,78 +16,104 @@
   <main class="container-x">
     <section class="px-6 pt-12 pb-6 text-center">
       <span class="cat-tag tag-fact" style="display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 10px;border-radius:2px;margin-bottom:16px;">The team</span>
-      <h1 class="font-serif" style="font-size:54px;line-height:1.05;margin:0 0 12px;">Six people, five modules</h1>
+      <h1 class="font-serif" style="font-size:54px;line-height:1.05;margin:0 0 12px;">Six people, six modules</h1>
       <p class="mx-auto" style="font-size:18px;color:#4a4a4a;max-width:680px;line-height:1.55;">
-        Each Verify module is led by a dedicated specialist — combining
-        computer vision research, investigative journalism, and communication
-        sciences.
+        Verify was built by a team of six 3rd-year AI engineering students at
+        ESPRIT School of Engineering. Each module is led by a dedicated
+        specialist; together we combine computer vision, NLP, forensics and
+        regulatory knowledge into one platform.
       </p>
+    </section>
+
+    <!-- Team photo — taken on the ESPRIT campus, 2025-2026 -->
+    <section class="px-6 pb-10" style="max-width:1100px;margin:0 auto;">
+      <figure style="margin:0;border:1px solid #e5e7eb;background:#fff;box-shadow:0 6px 24px rgba(15,23,42,0.06);">
+        <div style="position:relative;background:#0b1020;">
+          <img src="assets/img/team-photo.jpg" alt="The Verify team at ESPRIT" style="display:block;width:100%;height:auto;object-fit:cover;" />
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:18px 22px;background:linear-gradient(180deg,transparent 0%,rgba(7,12,30,0.72) 65%,rgba(7,12,30,0.92) 100%);color:#fff;">
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;letter-spacing:-0.01em;">The Verify team — ESPRIT 2025-2026</div>
+            <div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;opacity:0.85;margin-top:4px;letter-spacing:0.02em;text-transform:uppercase;">
+              Class 3IA1 · Group FBAIS · Tutors: Mme Sonia Mesbah &amp; M. Mustapha Trabelsi
+            </div>
+          </div>
+        </div>
+        <figcaption style="padding:14px 20px;font-family:'Inter',sans-serif;font-size:13.5px;color:#4a4a4a;line-height:1.6;border-top:1px solid #e5e7eb;">
+          Yassmine Nouisser · Islem Tellili · Malek Tirellil · Youssef Jouini · Rayen Ayat · Maryem Ouichka
+        </figcaption>
+      </figure>
     </section>
 
     <section class="team-grid">
       <article class="team-card">
-        <div class="avatar" style="background:#ede9fe;color:#5b21b6;">Y</div>
-        <h3>Youssef Kamoun</h3>
-        <div class="role">Lead — AI-Generated Media Detection</div>
+        <div class="avatar" style="background:#ffedd5;color:#9a3412;">Y</div>
+        <h3>Yassmine Nouisser</h3>
+        <div class="role">Project Lead — Cosmetic Ads Fact-Check &amp; Platform Integration</div>
         <p>
-          PhD candidate in computer vision, focused on the tell-tale signs
-          left behind by AI image and video generators. Leads our work on
-          spotting synthetic media from the major creative tools.
-        </p>
-      </article>
-
-      <article class="team-card">
-        <div class="avatar" style="background:#fef3c7;color:#78350f;">M</div>
-        <h3>Malek Ouni</h3>
-        <div class="role">Lead — Manipulation &amp; Persuasion</div>
-        <p>
-          Image semiotics specialist, former editor on political
-          communication. Designs the checks that surface biased framing,
-          color grading and emotional composition.
+          Owns the cosmetic-ads fact-checking module (Whisper + EasyOCR + a
+          curated EU-655/2013 knowledge base with 25 patterns, 33 fake claims
+          and 145 verified ingredients). Coordinates the full Verify platform —
+          frontend, FastAPI backend, the Verify Assistant chatbot, and the
+          HuggingFace Space deployment.
         </p>
       </article>
 
       <article class="team-card">
         <div class="avatar" style="background:#dbeafe;color:#1e3a8a;">I</div>
-        <h3>Islem Trabelsi</h3>
-        <div class="role">Lead — Caption Fidelity &amp; Coherence</div>
+        <h3>Islem Tellili</h3>
+        <div class="role">Lead — Fake Media Detection (deepfake &amp; AI-generated)</div>
         <p>
-          Engineer specialized in reading images and captions together.
-          Leads the analysis that flags decontextualized images, captions
-          that don't match the picture, and captions that exaggerate or
-          leave things out.
+          Trains and validates the ResNet50 ensemble that powers face-deepfake
+          detection, paired with an MTCNN face detector and a two-stage
+          AI-image consensus to catch GAN portraits and diffusion-model
+          generations the deepfake model alone would miss.
+        </p>
+      </article>
+
+      <article class="team-card">
+        <div class="avatar" style="background:#fef3c7;color:#78350f;">M</div>
+        <h3>Malek Tirellil</h3>
+        <div class="role">Lead — Visual Manipulation &amp; Persuasion</div>
+        <p>
+          Designs the multi-signal pipeline that scores persuasion in an image:
+          TrOCR for on-screen text, a DistilRoBERTa classifier fine-tuned for
+          clickbait, CLIP zero-shot for sensational visual style, and a curated
+          OCR-driven urgency lexicon in French and English.
+        </p>
+      </article>
+
+      <article class="team-card">
+        <div class="avatar" style="background:#ede9fe;color:#5b21b6;">Y</div>
+        <h3>Youssef Jouini</h3>
+        <div class="role">Lead — Image-Caption Coherence</div>
+        <p>
+          Builds the cross-modal coherence pipeline that compares an image (or
+          a video) with the caption it is published with — fusing CLIP ViT-L/14,
+          YOLOv8m object detection, EasyOCR on-screen text, SAM segmentation
+          and Whisper audio transcription into a single verdict.
         </p>
       </article>
 
       <article class="team-card">
         <div class="avatar" style="background:#dcfce7;color:#14532d;">R</div>
-        <h3>Rayen Mhadhbi</h3>
-        <div class="role">Lead — Edited Photo Detection</div>
+        <h3>Rayen Ayat</h3>
+        <div class="role">Lead — Image Tampering &amp; Photoshop Forensics</div>
         <p>
-          Forensic analyst trained in judicial expertise. Spots local edits
-          on otherwise authentic images — added objects, cloned areas,
-          spliced-in elements and erased details.
+          Owns the photo-forensics module. The pipeline runs three classic
+          model-free techniques — Error-Level Analysis, noise residual and
+          JPEG ghost — to localise edits (splicing, inpainting, copy-move) on
+          the image with no trained classifier in the loop.
         </p>
       </article>
 
       <article class="team-card">
-        <div class="avatar" style="background:#dbeafe;color:#1e3a8a;">M</div>
-        <h3>Maryem Ben Slimane</h3>
-        <div class="role">Editor-in-Chief</div>
+        <div class="avatar" style="background:#fde2e1;color:#9d174d;">M</div>
+        <h3>Maryem Ouichka</h3>
+        <div class="role">Cross-Modal Coherence Analysis</div>
         <p>
-          Investigative journalist, pan-Arab fact-checking specialist.
-          Coordinates the entire newsroom across all five analysis modules.
-        </p>
-      </article>
-
-      <article class="team-card">
-        <div class="avatar" style="background:#ffedd5;color:#9a3412;">Y</div>
-        <h3>Yasmine Khelifi</h3>
-        <div class="role">Lead — Cosmetic Ads Fact-Check</div>
-        <p>
-          Designer-developer, former lead UX of a regional advertising
-          platform. Owns the cosmetic-ads module — retouched before/after,
-          deepfaked testimonials, misleading visual promises.
+          Investigates how the five detection signals agree (or disagree) on
+          the same media — a transverse study that feeds calibration data back
+          into the coherence and caption-fidelity modules and helps the
+          newsroom interpret borderline verdicts.
         </p>
       </article>
     </section>
@@ -114,7 +140,7 @@
   <div id="site-footer"></div>
 
 
-  <script src="assets/js/config.js?v=1"></script>  <script src="assets/js/components.js?v=14"></script>
+  <script src="assets/js/config.js?v=2"></script>  <script src="assets/js/components.js?v=14"></script>
   <script src="assets/js/main.js?v=7"></script>
 </body>
 </html>
