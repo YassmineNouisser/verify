@@ -148,18 +148,55 @@ Verify/
 └── ios images/                     ← jeu d'images de référence pour la démo
 ```
 
-## Auteurs
+## Équipe
 
-| Nom | Module | Année | Tuteur |
-|---|---|---|---|
-| Yassmine Nouisser  | io6 — Cosmetic Ads Fact-Check + intégration globale | 2025-2026 | *(à compléter)* |
-| Islem              | io1 — Fake Media Detection (deepfake + AI) | 2025-2026 | *(à compléter)* |
-| Malek Tirellil     | io2 — Visual Manipulation Detection         | 2025-2026 | *(à compléter)* |
-| Youssef            | io3 — Image-Caption Coherence               | 2025-2026 | *(à compléter)* |
-| Rayen              | io4 — Image Tampering Detection             | 2025-2026 | *(à compléter)* |
-| Maryem             | (contribution complémentaire)               | 2025-2026 | *(à compléter)* |
+<p align="center">
+  <img src="assets/img/team-photo.jpg" alt="L'équipe Verify devant le campus ESPRIT" width="780" />
+  <br />
+  <em>L'équipe <strong>Verify</strong> — Projet Intégré 3e année IA · ESPRIT School of Engineering · 2025-2026</em>
+</p>
 
-Classe : *(à compléter)* — Groupe : *(à compléter)*
+> **Classe** 3IA1 &nbsp;·&nbsp; **Groupe** FBAIS &nbsp;·&nbsp; **Année universitaire** 2025-2026
+> **Tuteurs** : Mme Sonia Mesbah &amp; M. Mustapha Trabelsi
+> **Établissement** : ESPRIT School of Engineering — Honoris United Universities
+
+### Contributeurs
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### 🎯 **Yassmine Nouisser** — *Lead*
+**io6** Cosmetic Ads Fact-Check
++ chatbot Verify Assistant
++ intégration globale (frontend + backend FastAPI + déploiement HF Space)
+
+#### 👁️ **Islem Tellili**
+**io1** Fake Media Detection
+*ResNet50 ensemble + MTCNN + AI-image consensus*
+
+#### 🎭 **Malek Tirellil**
+**io2** Visual Manipulation Detection
+*TrOCR + DistilRoBERTa clickbait + CLIP zero-shot*
+
+</td>
+<td width="50%" valign="top">
+
+#### 🔗 **Youssef Jouini**
+**io3** Image-Caption Coherence
+*CLIP ViT-L/14 + YOLOv8m + Whisper + EasyOCR*
+
+#### 🔍 **Rayen Ayat**
+**io4** Image Tampering Detection
+*Forensique sans modèle — ELA + Noise residual + JPEG ghost*
+
+#### 📊 **Maryem Ouichka**
+Analyse cross-modale & contributions transverses
+*Étude de la cohérence multi-signaux pour la détection de désinformation*
+
+</td>
+</tr>
+</table>
 
 ---
 
